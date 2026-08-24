@@ -1,0 +1,7 @@
+// lib/data/providers/providers.dart
+export 'auth_provider.dart';
+export 'habit_provider.dart';
+export 'journal_provider.dart';
+export 'analytics_provider.dart';
+export 'group_provider.dart';
+export 'habit_creation_provider.dart';
