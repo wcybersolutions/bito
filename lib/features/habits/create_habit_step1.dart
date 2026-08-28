@@ -22,6 +22,7 @@ class CreateHabitStep1 extends ConsumerStatefulWidget {
 }
 
 class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
+  late TextEditingController _nameController;
   late String _habitName;
   late String _selectedCategory;
   late String _selectedIcon;
@@ -78,13 +79,41 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
     ],
   };
 
+  // Map incoming habit category names to valid _categoryIcons keys
+  static const _categoryKeyMap = {
+    'Activity': 'Activity',
+    'Health': 'Health',
+    'Fitness': 'Activity',
+    'Mind': 'Mind',
+    'Mindfulness': 'Mind',
+    'Productivity': 'Productivity',
+    'Learning': 'Mind',
+    'Life': 'Life',
+    'Social': 'Life',
+    'Creative': 'Life',
+    'Sleep': 'Sleep',
+    'Other': 'Productivity',
+  };
+
+  String _toValidCategory(String cat) =>
+      _categoryKeyMap[cat] ?? 'Productivity';
+
   @override
   void initState() {
     super.initState();
     final state = ref.read(habitCreationProvider);
     _habitName = state.name;
-    _selectedCategory = state.category.isNotEmpty ? state.category : 'Productivity';
+    _nameController = TextEditingController(text: _habitName);
+    // Map incoming category to one that exists in _categoryIcons
+    final incoming = state.category.isNotEmpty ? state.category : 'Productivity';
+    _selectedCategory = _toValidCategory(incoming);
     _selectedIcon = state.icon.isNotEmpty ? state.icon : 'target';
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -99,105 +128,189 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
           children: [
             _buildHeader(context),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(
-                      widget.isEditing ? 'EDIT HABIT' : 'STEP 1 OF 4',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: colors.signal2,
-                        letterSpacing: 1.2,
-                        fontFamily: 'SpaceMono',
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: colors.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: colors.line),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildCardHeader(context, colors, textTheme),
+                      _buildProgress(context),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'NAME*',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: colors.ink3,
+                                  letterSpacing: 1.2,
+                                  fontFamily: 'SpaceMono',
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: colors.line),
+                                  color: colors.surface,
+                                ),
+                                child: TextField(
+                                  controller: _nameController,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _habitName = value;
+                                    });
+                                  },
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: colors.ink,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: 'Deep work',
+                                    hintStyle: TextStyle(
+                                      color: colors.ink3,
+                                      fontSize: 16,
+                                    ),
+                                    border: InputBorder.none,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'CATEGORY',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: colors.ink3,
+                                  letterSpacing: 1.2,
+                                  fontFamily: 'SpaceMono',
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: _categories.map((category) {
+                                  final isSelected = _selectedCategory == category;
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _selectedCategory = category;
+                                        final icons = _categoryIcons[category];
+                                        if (icons != null && icons.isNotEmpty) {
+                                          _selectedIcon = icons.first['name'] as String;
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                                      decoration: BoxDecoration(
+                                        color: isSelected ? colors.signal2 : colors.surface,
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: isSelected ? colors.signal2 : colors.line,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        category.toUpperCase(),
+                                        style: TextStyle(
+                                          fontSize: 9,
+                                          fontWeight: FontWeight.w700,
+                                          color: isSelected ? colors.signalInk : colors.ink2,
+                                          letterSpacing: 0.3,
+                                          fontFamily: 'SpaceMono',
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'ICON',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: colors.ink3,
+                                  letterSpacing: 1.2,
+                                  fontFamily: 'SpaceMono',
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Wrap(
+                                spacing: 12,
+                                runSpacing: 12,
+                                children: (_categoryIcons[_selectedCategory] ?? _categoryIcons['Productivity']!).map((iconData) {
+                                  final isSelected = _selectedIcon == iconData['name'];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _selectedIcon = iconData['name'];
+                                      });
+                                    },
+                                    child: Container(
+                                      width: 48,
+                                      height: 48,
+                                      decoration: BoxDecoration(
+                                        color: isSelected ? colors.signal2 : colors.surface,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: isSelected ? colors.signal2 : colors.line,
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        iconData['icon'],
+                                        size: 24,
+                                        color: isSelected ? colors.signalInk : colors.ink2,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      widget.isEditing
-                          ? 'Update your habit details'
-                          : 'What habit do you want to build?',
-                      style: textTheme.headlineSmall?.copyWith(
-                        color: colors.ink,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      widget.isEditing
-                          ? 'Edit the name, category, and icon'
-                          : 'Name it, pick an icon, and you\'re off.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: colors.ink2,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    _buildNameField(context, colors),
-                    const SizedBox(height: 24),
-                    _buildCategorySelector(context, colors),
-                    const SizedBox(height: 24),
-                    _buildIconSelector(context, colors),
-                    const SizedBox(height: 24),
-                  ],
+                      _buildBottomActions(context),
+                    ],
+                  ),
                 ),
               ),
             ),
-            _buildBottomActions(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    final colors = Theme.of(context).extension<BitoColorScheme>()!;
-
+  Widget _buildCardHeader(
+      BuildContext context,
+      BitoColorScheme colors,
+      TextTheme textTheme,
+      ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: const EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () => context.go('/habits'),
-                icon: Icon(
-                  PhosphorIcons.arrowLeft(),
-                  size: 20,
-                  color: colors.ink,
-                ),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-              const SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.isEditing ? 'Edit • Tracker' : 'New Entry • Tracker',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      color: colors.ink3,
-                      letterSpacing: 0.5,
-                      fontFamily: 'SpaceMono',
-                    ),
-                  ),
-                  Text(
-                    'Habits',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: colors.ink,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          Text(
+            widget.isEditing ? 'Edit Habit' : 'New Habit',
+            style: textTheme.headlineSmall?.copyWith(
+              color: colors.ink,
+            ),
           ),
           IconButton(
             onPressed: () => context.go('/habits'),
@@ -214,203 +327,70 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
     );
   }
 
+  Widget _buildHeader(BuildContext context) {
+    final colors = Theme.of(context).extension<BitoColorScheme>()!;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'HABIT SETUP',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: colors.ink3,
+              letterSpacing: 1.2,
+              fontFamily: 'SpaceMono',
+            ),
+          ),
+          // Quick Mode removed
+          const SizedBox(),
+        ],
+      ),
+    );
+  }
+
   Widget _buildProgress(BuildContext context) {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
     final steps = ['WHAT', 'WHEN', 'STYLE', 'GO'];
     const activeStep = 0;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(steps.length, (index) {
-        final isActive = index <= activeStep;
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 6),
-          child: Column(
-            children: [
-              Container(
-                width: 28,
-                height: isActive ? 3 : 2,
-                decoration: BoxDecoration(
-                  color: isActive ? colors.signal2 : colors.line2,
-                  borderRadius: BorderRadius.circular(1.5),
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                steps[index],
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w700,
-                  color: isActive ? colors.signal2 : colors.ink3,
-                  letterSpacing: 0.5,
-                  fontFamily: 'SpaceMono',
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
-    );
-  }
-
-  Widget _buildNameField(BuildContext context, BitoColorScheme colors) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'NAME*',
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-            color: colors.ink3,
-            letterSpacing: 1.2,
-            fontFamily: 'SpaceMono',
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(11),
-            border: Border.all(color: colors.line),
-            color: colors.surface,
-          ),
-          child: TextField(
-            onChanged: (value) {
-              setState(() {
-                _habitName = value;
-              });
-            },
-            controller: TextEditingController(text: _habitName)
-              ..selection = TextSelection.fromPosition(
-                TextPosition(offset: _habitName.length),
-              ),
-            style: TextStyle(
-              fontSize: 16,
-              color: colors.ink,
-            ),
-            decoration: InputDecoration(
-              hintText: 'Deep work',
-              hintStyle: TextStyle(
-                color: colors.ink3,
-                fontSize: 16,
-              ),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 16,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCategorySelector(BuildContext context, BitoColorScheme colors) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'CATEGORY',
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-            color: colors.ink3,
-            letterSpacing: 1.2,
-            fontFamily: 'SpaceMono',
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: _categories.map((category) {
-            final isSelected = _selectedCategory == category;
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedCategory = category;
-                      _selectedIcon = _categoryIcons[category]!.first['name'];
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: isSelected ? colors.signal2 : colors.surface,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: isSelected ? colors.signal2 : colors.line,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        category.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 9,
-                          fontWeight: FontWeight.w700,
-                          color: isSelected ? colors.signalInk : colors.ink2,
-                          letterSpacing: 0.3,
-                          fontFamily: 'SpaceMono',
-                        ),
-                      ),
-                    ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(steps.length, (index) {
+          final isActive = index <= activeStep;
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            child: Column(
+              children: [
+                Container(
+                  width: 60,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: isActive ? colors.signal2 : colors.line2,
+                    borderRadius: BorderRadius.circular(1.5),
                   ),
                 ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildIconSelector(BuildContext context, BitoColorScheme colors) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'ICON',
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-            color: colors.ink3,
-            letterSpacing: 1.2,
-            fontFamily: 'SpaceMono',
-          ),
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: _categoryIcons[_selectedCategory]!.map((iconData) {
-            final isSelected = _selectedIcon == iconData['name'];
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedIcon = iconData['name'];
-                });
-              },
-              child: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: isSelected ? colors.signal2 : colors.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: isSelected ? colors.signal2 : colors.line,
+                const SizedBox(height: 4),
+                Text(
+                  steps[index],
+                  style: TextStyle(
+                    fontSize: 7,
+                    fontWeight: FontWeight.w700,
+                    color: isActive ? colors.signal2 : colors.ink3,
+                    letterSpacing: 0.5,
+                    fontFamily: 'SpaceMono',
                   ),
                 ),
-                child: Icon(
-                  iconData['icon'],
-                  size: 24,
-                  color: isSelected ? colors.signalInk : colors.ink2,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 
@@ -418,9 +398,8 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
-        color: colors.bg,
         border: Border(
           top: BorderSide(color: colors.line),
         ),
@@ -429,7 +408,7 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ActionButton(
-            text: widget.isEditing ? 'CANCEL' : 'CANCEL',
+            text: 'CANCEL',
             type: ButtonType.cancel,
             icon: Icon(
               PhosphorIcons.x(),
@@ -450,7 +429,6 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
                 );
                 return;
               }
-              // Store habit data in provider
               ref.read(habitCreationProvider.notifier).updateName(_habitName);
               ref.read(habitCreationProvider.notifier).updateIcon(_selectedIcon);
               ref.read(habitCreationProvider.notifier).updateCategory(_selectedCategory);

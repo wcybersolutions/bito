@@ -1,26 +1,38 @@
 // lib/features/groups/create_group_step3.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:bito/theme/theme_extensions.dart';
 import 'package:bito/shared/shared.dart';
 import 'package:bito/data/groups/group.dart';
+import 'package:bito/data/groups/groups_provider.dart';
 
-class CreateGroupStep3 extends StatefulWidget {
+class CreateGroupStep3 extends ConsumerStatefulWidget {
   const CreateGroupStep3({super.key});
 
   @override
-  State<CreateGroupStep3> createState() => _CreateGroupStep3State();
+  ConsumerState<CreateGroupStep3> createState() => _CreateGroupStep3State();
 }
 
-class _CreateGroupStep3State extends State<CreateGroupStep3> {
+class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
   bool _privateGroup = true;
   GroupIntensity _intensity = GroupIntensity.supportive;
+  bool _isCreating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final draft = ref.read(groupDraftProvider);
+    _privateGroup = draft.isPrivate;
+    _intensity = draft.intensity;
+  }
 
   void _updateIntensity(GroupIntensity intensity) {
     setState(() {
       _intensity = intensity;
     });
+    ref.read(groupDraftProvider.notifier).updateIntensity(intensity);
   }
 
   @override
@@ -327,7 +339,7 @@ class _CreateGroupStep3State extends State<CreateGroupStep3> {
       child: GestureDetector(
         onTap: () => _updateIntensity(intensity),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
           decoration: BoxDecoration(
             color: isSelected ? colors.signal2 : Colors.black,
             borderRadius: BorderRadius.circular(8),
@@ -335,7 +347,8 @@ class _CreateGroupStep3State extends State<CreateGroupStep3> {
               color: isSelected ? colors.signal2 : colors.line,
             ),
           ),
-          child: Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
@@ -343,15 +356,18 @@ class _CreateGroupStep3State extends State<CreateGroupStep3> {
                 size: 16,
                 color: isSelected ? Colors.black : colors.ink2,
               ),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: isSelected ? Colors.black : colors.ink2,
-                  letterSpacing: 0.5,
-                  fontFamily: 'SpaceMono',
+              const SizedBox(height: 4),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w700,
+                    color: isSelected ? Colors.black : colors.ink2,
+                    letterSpacing: 0.3,
+                    fontFamily: 'SpaceMono',
+                  ),
                 ),
               ),
             ],
@@ -466,9 +482,43 @@ class _CreateGroupStep3State extends State<CreateGroupStep3> {
           ),
           // Custom CREATE GROUP button with check icon on left
           ElevatedButton(
-            onPressed: () {
-              context.go('/groups/1');
-            },
+            onPressed: _isCreating
+                ? null
+                : () async {
+                    setState(() {
+                      _isCreating = true;
+                    });
+                    try {
+                      final draft = ref.read(groupDraftProvider);
+                      final newGroup = Group(
+                        id: DateTime.now().millisecondsSinceEpoch.toString(),
+                        name: draft.name.isNotEmpty ? draft.name : 'New Group',
+                        description: draft.description.isNotEmpty ? draft.description : null,
+                        type: draft.type,
+                        intensity: _intensity,
+                        color: draft.color,
+                        isPrivate: _privateGroup,
+                        feedEvents: true,
+                        missedDays: true,
+                        nudges: true,
+                        leaderboard: true,
+                        inviteCode: 'GRP${(DateTime.now().millisecondsSinceEpoch % 9000 + 1000)}',
+                        memberCount: 1,
+                        createdAt: DateTime.now(),
+                      );
+                      await ref.read(groupCreationProvider.notifier).createGroup(newGroup);
+                      ref.read(groupDraftProvider.notifier).reset();
+                      if (mounted) {
+                        context.go('/groups/${newGroup.id}');
+                      }
+                    } finally {
+                      if (mounted) {
+                        setState(() {
+                          _isCreating = false;
+                        });
+                      }
+                    }
+                  },
             style: ElevatedButton.styleFrom(
               backgroundColor: colors.signal2,
               foregroundColor: Colors.black,
@@ -478,26 +528,32 @@ class _CreateGroupStep3State extends State<CreateGroupStep3> {
               ),
               elevation: 0,
             ),
-            child: Row(
-              children: [
-                Icon(
-                  PhosphorIcons.check(),
-                  size: 16,
-                  color: Colors.black,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'CREATE GROUP',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                    letterSpacing: 0.5,
-                    fontFamily: 'SpaceMono',
+            child: _isCreating
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                  )
+                : Row(
+                    children: [
+                      Icon(
+                        PhosphorIcons.check(),
+                        size: 16,
+                        color: Colors.black,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'CREATE GROUP',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                          letterSpacing: 0.5,
+                          fontFamily: 'SpaceMono',
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

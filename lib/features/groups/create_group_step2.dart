@@ -1,19 +1,21 @@
 // lib/features/groups/create_group_step2.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:bito/theme/theme_extensions.dart';
 import 'package:bito/shared/shared.dart';
+import 'package:bito/data/groups/groups_provider.dart';
 
-class CreateGroupStep2 extends StatefulWidget {
+class CreateGroupStep2 extends ConsumerStatefulWidget {
   const CreateGroupStep2({super.key});
 
   @override
-  State<CreateGroupStep2> createState() => _CreateGroupStep2State();
+  ConsumerState<CreateGroupStep2> createState() => _CreateGroupStep2State();
 }
 
-class _CreateGroupStep2State extends State<CreateGroupStep2> {
-  Color _selectedColor = const Color(0xFF6F4EE6);
+class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
+  late Color _selectedColor;
   final List<Color> _colors = [
     const Color(0xFF6F4EE6),
     const Color(0xFF2563EB),
@@ -28,6 +30,12 @@ class _CreateGroupStep2State extends State<CreateGroupStep2> {
     const Color(0xFFF472B6),
     const Color(0xFF6366F1),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedColor = ref.read(groupDraftProvider).color;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -332,6 +340,7 @@ class _CreateGroupStep2State extends State<CreateGroupStep2> {
           // Custom CONTINUE button with arrow on right
           ElevatedButton(
             onPressed: () {
+              ref.read(groupDraftProvider.notifier).updateColor(_selectedColor);
               context.go('/groups/create/step3');
             },
             style: ElevatedButton.styleFrom(

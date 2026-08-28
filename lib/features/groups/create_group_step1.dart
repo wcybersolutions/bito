@@ -1,22 +1,24 @@
 // lib/features/groups/create_group_step1.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:bito/theme/theme_extensions.dart';
 import 'package:bito/shared/shared.dart';
 import 'package:bito/data/groups/group.dart';
+import 'package:bito/data/groups/groups_provider.dart';
 
-class CreateGroupStep1 extends StatefulWidget {
+class CreateGroupStep1 extends ConsumerStatefulWidget {
   const CreateGroupStep1({super.key});
 
   @override
-  State<CreateGroupStep1> createState() => _CreateGroupStep1State();
+  ConsumerState<CreateGroupStep1> createState() => _CreateGroupStep1State();
 }
 
-class _CreateGroupStep1State extends State<CreateGroupStep1> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  GroupType _selectedType = GroupType.personal;
+class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
+  late final TextEditingController _nameController;
+  late final TextEditingController _descriptionController;
+  late GroupType _selectedType;
 
   final List<GroupType> _groupTypes = [
     GroupType.personal,
@@ -26,6 +28,15 @@ class _CreateGroupStep1State extends State<CreateGroupStep1> {
     GroupType.study,
     GroupType.community,
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    final draft = ref.read(groupDraftProvider);
+    _nameController = TextEditingController(text: draft.name);
+    _descriptionController = TextEditingController(text: draft.description);
+    _selectedType = draft.type;
+  }
 
   @override
   void dispose() {
@@ -398,6 +409,24 @@ class _CreateGroupStep1State extends State<CreateGroupStep1> {
           ),
           ElevatedButton(
             onPressed: () {
+              final name = _nameController.text.trim();
+              if (name.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Please enter a group name',
+                      style: TextStyle(color: colors.ink),
+                    ),
+                    backgroundColor: colors.surface,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+                return;
+              }
+              final notifier = ref.read(groupDraftProvider.notifier);
+              notifier.updateName(name);
+              notifier.updateDescription(_descriptionController.text.trim());
+              notifier.updateType(_selectedType);
               context.go('/groups/create/step2');
             },
             style: ElevatedButton.styleFrom(

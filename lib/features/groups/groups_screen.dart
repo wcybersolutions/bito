@@ -1,21 +1,20 @@
-// lib/features/groups_screen.dart
+// lib/features/groups/groups_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:bito/theme/theme_extensions.dart';
-import 'package:bito/shared/shared.dart';
+import 'package:bito/data/groups/group.dart';
+import 'package:bito/data/groups/groups_provider.dart';
 
-class GroupsScreen extends StatelessWidget {
+class GroupsScreen extends ConsumerWidget {
   const GroupsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
     final textTheme = Theme.of(context).textTheme;
-
-    // Check if user has groups - for demo, we'll show empty state
-    // In a real app, this would come from a provider
-    const bool hasGroups = false; // Fixed: use const instead of final
+    final groupsAsync = ref.watch(groupsProvider);
 
     return Scaffold(
       backgroundColor: colors.bg,
@@ -25,31 +24,138 @@ class GroupsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
+              // Small tracking header
               Text(
-                'Groups',
-                style: textTheme.displayMedium?.copyWith(
-                  color: colors.ink,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'TRACK HABITS TOGETHER : TEAM, FRIENDS, OR FAMILY',
+                'THE BASECAMPS',
                 style: TextStyle(
-                  fontSize: 9,
+                  fontSize: 10,
                   fontWeight: FontWeight.w700,
                   color: colors.ink3,
-                  letterSpacing: 0.5,
+                  letterSpacing: 1.2,
                   fontFamily: 'SpaceMono',
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 6),
 
-              // Show different content based on whether user has groups
-              if (hasGroups)
-                _buildGroupsList(context, colors, textTheme)
-              else
-                _buildEmptyState(context, colors, textTheme),
+              // Title and Actions Button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Groups',
+                    style: textTheme.displayMedium?.copyWith(
+                      color: colors.ink,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () => _showGroupActionsSheet(context),
+                    icon: Icon(
+                      PhosphorIcons.list(),
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    label: const Text(
+                      'ACTIONS',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black,
+                        letterSpacing: 0.6,
+                        fontFamily: 'SpaceMono',
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colors.signal2,
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      elevation: 0,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+
+              // Summary Stats Line
+              groupsAsync.when(
+                data: (groups) {
+                  final activeCount = groups.length.toString().padLeft(2, '0');
+                  final totalMembers = groups.fold<int>(0, (sum, g) => sum + g.memberCount);
+                  return Row(
+                    children: [
+                      Text(
+                        '$activeCount ACTIVE',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: colors.signal2,
+                          letterSpacing: 0.5,
+                          fontFamily: 'SpaceMono',
+                        ),
+                      ),
+                      Text(
+                        ' · $totalMembers MEMBERS · 3 SHARED HABITS',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: colors.ink3,
+                          letterSpacing: 0.5,
+                          fontFamily: 'SpaceMono',
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                loading: () => Text(
+                  '01 ACTIVE · 1 MEMBERS · 3 SHARED HABITS',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: colors.ink3,
+                    letterSpacing: 0.5,
+                    fontFamily: 'SpaceMono',
+                  ),
+                ),
+                error: (_, __) => Text(
+                  '00 ACTIVE · 0 MEMBERS',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: colors.ink3,
+                    letterSpacing: 0.5,
+                    fontFamily: 'SpaceMono',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Divider(height: 1, color: colors.line),
+              const SizedBox(height: 16),
+
+              // Group List or Empty State
+              groupsAsync.when(
+                data: (groups) {
+                  if (groups.isEmpty) {
+                    return _buildEmptyState(context, colors, textTheme);
+                  }
+                  return _buildGroupsList(context, colors, textTheme, groups);
+                },
+                loading: () => Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(40),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: colors.signal,
+                    ),
+                  ),
+                ),
+                error: (_, __) => _buildEmptyState(context, colors, textTheme),
+              ),
             ],
           ),
         ),
@@ -66,15 +172,23 @@ class GroupsScreen extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: colors.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: colors.line),
       ),
       child: Column(
         children: [
-          Icon(
-            PhosphorIcons.users(),
-            size: 40,
-            color: colors.ink3,
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: colors.signal2.withValues(alpha: 0.15),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              PhosphorIcons.users(),
+              size: 24,
+              color: colors.signal2,
+            ),
           ),
           const SizedBox(height: 16),
           Text(
@@ -92,6 +206,7 @@ class GroupsScreen extends StatelessWidget {
             'Gather the troops',
             style: textTheme.headlineSmall?.copyWith(
               color: colors.ink,
+              fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 4),
@@ -104,8 +219,7 @@ class GroupsScreen extends StatelessWidget {
               height: 1.5,
             ),
           ),
-          const SizedBox(height: 16),
-          // CREATE GROUP button - full width, on top
+          const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
@@ -117,7 +231,7 @@ class GroupsScreen extends StatelessWidget {
                 size: 16,
                 color: Colors.black,
               ),
-              label: Text(
+              label: const Text(
                 'CREATE GROUP',
                 style: TextStyle(
                   fontSize: 11,
@@ -139,12 +253,11 @@ class GroupsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          // JOIN WITH CODE button - full width, below
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
               onPressed: () {
-                _showJoinWithCodeDialog(context);
+                _showGroupActionsSheet(context);
               },
               icon: Icon(
                 PhosphorIcons.magnifyingGlass(),
@@ -180,15 +293,16 @@ class GroupsScreen extends StatelessWidget {
       BuildContext context,
       BitoColorScheme colors,
       TextTheme textTheme,
+      List<Group> groups,
       ) {
-    // This would be a ListView.builder with actual groups data
-    // For now, showing a sample group
-    return Column(
-      children: [
-        _buildGroupCard(context, colors, textTheme, '1'), // Fixed: added groupId parameter
-        const SizedBox(height: 16),
-        // Add more groups here
-      ],
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: groups.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 16),
+      itemBuilder: (context, index) {
+        return _buildGroupCard(context, colors, textTheme, groups[index], index + 1);
+      },
     );
   }
 
@@ -196,65 +310,146 @@ class GroupsScreen extends StatelessWidget {
       BuildContext context,
       BitoColorScheme colors,
       TextTheme textTheme,
-      String groupId, // Added groupId parameter
+      Group group,
+      int index,
       ) {
+    final memberCountStr = group.memberCount.toString().padLeft(2, '0');
+    final indexStr = index.toString().padLeft(2, '0');
+
     return GestureDetector(
       onTap: () {
-        context.go('/groups/$groupId');
+        context.go('/groups/${group.id}');
       },
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: colors.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(color: colors.line),
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: colors.signal.withValues(alpha: 0.1), // Fixed: use withValues
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                PhosphorIcons.users(),
-                size: 24,
-                color: colors.signal,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Morning Grind',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: colors.ink,
+            // Card Top Row: Group Icon Badge and Group Index (№ 01)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: group.color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: group.color.withValues(alpha: 0.3),
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'TEAM · 2 MEMBERS',
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w700,
-                      color: colors.ink3,
-                      letterSpacing: 0.5,
-                      fontFamily: 'SpaceMono',
-                    ),
+                  child: Icon(
+                    group.type.icon,
+                    size: 20,
+                    color: group.color,
                   ),
-                ],
+                ),
+                Text(
+                  '№ $indexStr',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: colors.ink3,
+                    fontFamily: 'SpaceMono',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+
+            // Group Name
+            Text(
+              group.name,
+              style: textTheme.titleLarge?.copyWith(
+                color: colors.ink,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            Icon(
-              PhosphorIcons.arrowRight(),
-              size: 20,
-              color: colors.ink3,
+            const SizedBox(height: 4),
+
+            // Members & Active subtext
+            Row(
+              children: [
+                Text(
+                  '$memberCountStr ${group.memberCount == 1 ? 'MEMBER' : 'MEMBERS'} · ',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: colors.ink3,
+                    letterSpacing: 0.5,
+                    fontFamily: 'SpaceMono',
+                  ),
+                ),
+                Text(
+                  '1 ACTIVE',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: colors.signal2,
+                    letterSpacing: 0.5,
+                    fontFamily: 'SpaceMono',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Divider(height: 1, color: colors.line),
+            const SizedBox(height: 12),
+
+            // Card Bottom Row: Avatar + Type Pill, and Arrow Button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 14,
+                      backgroundColor: colors.surface2,
+                      child: Icon(PhosphorIcons.user(), size: 14, color: colors.ink),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: group.color.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: group.color.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Text(
+                        group.type.label,
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                          color: group.color,
+                          letterSpacing: 0.5,
+                          fontFamily: 'SpaceMono',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: colors.line),
+                  ),
+                  child: Icon(
+                    PhosphorIcons.arrowRight(),
+                    size: 16,
+                    color: colors.ink2,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -262,104 +457,217 @@ class GroupsScreen extends StatelessWidget {
     );
   }
 
-  void _showJoinWithCodeDialog(BuildContext context) {
+  void _showGroupActionsSheet(BuildContext context) {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
+    final textTheme = Theme.of(context).textTheme;
     final TextEditingController codeController = TextEditingController();
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: colors.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: colors.line),
-          ),
-          title: Text(
-            'JOIN WITH CODE',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: colors.ink3,
-              letterSpacing: 1.2,
-              fontFamily: 'SpaceMono',
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Enter the invite code shared with you to join a group.',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: colors.ink2,
-                ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        return Consumer(
+          builder: (context, ref, _) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
               ),
-              const SizedBox(height: 16),
-              Container(
+              child: Container(
+                padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
+                  color: colors.surface,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                   border: Border.all(color: colors.line),
                 ),
-                child: TextField(
-                  controller: codeController,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: colors.ink,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Enter code',
-                    hintStyle: TextStyle(
-                      color: colors.ink3,
-                      fontSize: 16,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Handle
+                    Center(
+                      child: Container(
+                        width: 36,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: colors.line2,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
                     ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                    const SizedBox(height: 20),
+
+                    // Title
+                    Text(
+                      'Group Actions',
+                      style: textTheme.titleLarge?.copyWith(
+                        color: colors.ink,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Join an existing group or create a new one.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: colors.ink2,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // JOIN BY CODE OR QR section
+                    Text(
+                      'JOIN BY CODE OR QR',
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w700,
+                        color: colors.ink3,
+                        letterSpacing: 0.8,
+                        fontFamily: 'SpaceMono',
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: colors.bg,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: colors.line),
+                            ),
+                            child: TextField(
+                              controller: codeController,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: colors.ink,
+                                fontFamily: 'SpaceMono',
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textCapitalization: TextCapitalization.characters,
+                              decoration: InputDecoration(
+                                hintText: 'PASTE INVITE CODE...',
+                                hintStyle: TextStyle(
+                                  color: colors.ink3,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'SpaceMono',
+                                  letterSpacing: 0.5,
+                                ),
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 14,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        GestureDetector(
+                          onTap: () async {
+                            final code = codeController.text.trim();
+                            if (code.isNotEmpty) {
+                              try {
+                                final joined = await ref
+                                    .read(groupCreationProvider.notifier)
+                                    .joinGroup(code);
+                                if (sheetContext.mounted) {
+                                  Navigator.pop(sheetContext);
+                                  context.go('/groups/${joined.id}');
+                                }
+                              } catch (_) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Invalid invite code'),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: colors.signal2.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: colors.signal2.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            child: Icon(
+                              PhosphorIcons.qrCode(),
+                              color: colors.signal2,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+
+                    // OR divider
+                    Row(
+                      children: [
+                        Expanded(child: Divider(color: colors.line)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(
+                            'OR',
+                            style: TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
+                              color: colors.ink3,
+                              fontFamily: 'SpaceMono',
+                            ),
+                          ),
+                        ),
+                        Expanded(child: Divider(color: colors.line)),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+
+                    // CREATE NEW GROUP button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.pop(sheetContext);
+                          context.go('/groups/create/step1');
+                        },
+                        icon: Icon(
+                          PhosphorIcons.plus(),
+                          size: 16,
+                          color: Colors.black,
+                        ),
+                        label: const Text(
+                          'CREATE NEW GROUP',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.black,
+                            letterSpacing: 0.5,
+                            fontFamily: 'SpaceMono',
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colors.signal2,
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 0,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
                 ),
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                'CANCEL',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: colors.ink2,
-                  fontFamily: 'SpaceMono',
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Join group logic
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: colors.signal,
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                elevation: 0,
-              ),
-              child: Text(
-                'JOIN',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                  fontFamily: 'SpaceMono',
-                ),
-              ),
-            ),
-          ],
+            );
+          },
         );
       },
     );

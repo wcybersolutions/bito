@@ -24,6 +24,7 @@ export 'components/indicators/loading_indicator.dart';
 // Inputs
 export 'components/inputs/app_dropdown.dart';
 export 'components/inputs/app_text_field.dart';
+export 'components/inputs/digital_time_picker.dart';
 export 'components/inputs/search_field.dart';
 
 // Navigation

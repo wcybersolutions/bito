@@ -77,6 +77,7 @@ class HabitCreationState {
       icon: icon,
       color: color,
       target: target,
+      category: category,
     );
   }
 
@@ -92,6 +93,7 @@ class HabitCreationState {
       icon: habit.icon,
       color: habit.color,
       target: habit.target,
+      category: habit.category ?? 'Productivity',
       isEditing: true,
     );
   }

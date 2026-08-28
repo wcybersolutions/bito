@@ -194,18 +194,17 @@ class _WeeklyHabitsCardState extends State<WeeklyHabitsCard> {
               ],
             ),
             const SizedBox(width: 8),
-            // Edit icon
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                PhosphorIcons.pencil(),
-                size: 16,
-                color: colors.ink3,
-              ),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              style: IconButton.styleFrom(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            // Edit icon — GestureDetector prevents the tap from bubbling to the InkWell toggle
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => context.go('/habits/${habit.id}/edit'),
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: Icon(
+                  PhosphorIcons.pencil(),
+                  size: 16,
+                  color: colors.ink3,
+                ),
               ),
             ),
           ],

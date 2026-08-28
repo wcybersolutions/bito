@@ -286,7 +286,10 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
             }
             return Column(
               children: entries.take(3).map((entry) {
-                return JournalEntryCard(entry: entry);
+                return JournalEntryCard(
+                  entry: entry,
+                  onTap: () => context.go('/journal/${entry.id}/edit'),
+                );
               }).toList(),
             );
           },

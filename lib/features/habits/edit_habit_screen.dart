@@ -1,17 +1,11 @@
 // lib/features/habits/edit_habit_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../theme/theme_extensions.dart';
 import '../../shared/shared.dart';
-import '../../domain/entities/habit.dart';
 import '../../data/providers/habit_provider.dart';
 import '../../data/providers/habit_creation_provider.dart';
 import 'create_habit_step1.dart';
-import 'create_habit_step2.dart';
-import 'create_habit_step3.dart';
-import 'create_habit_step4.dart';
 
 class EditHabitScreen extends ConsumerStatefulWidget {
   final String habitId;
@@ -59,7 +53,12 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).extension<BitoColorScheme>()!;
+    final colors = Theme.of(context).extension<BitoColorScheme>();
+    if (colors == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
     if (_isLoading) {
       return Scaffold(

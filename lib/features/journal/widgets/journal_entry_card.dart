@@ -1,6 +1,5 @@
 // lib/features/journal/widgets/journal_entry_card.dart
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:bito/theme/theme_extensions.dart';
 import 'package:bito/data/journal/journal_entry.dart';
 
@@ -18,7 +17,7 @@ class JournalEntryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
     final month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][entry.date.month - 1];
-    final day = '${month} ${entry.date.day}';
+    final day = '$month ${entry.date.day}';
 
     return GestureDetector(
       onTap: onTap,

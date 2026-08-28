@@ -377,6 +377,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               ],
               tooltipBehavior: TooltipBehavior(
                 enable: true,
+                activationMode: ActivationMode.singleTap,
                 header: '',
                 canShowMarker: false,
                 builder: (dynamic data, dynamic point, dynamic series, int pointIndex, int seriesIndex) {
@@ -499,8 +500,42 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   borderRadius: BorderRadius.circular(20), // Fully rounded bars
                   width: 0.5, // Thin bars like the image
                   animationDuration: 500,
+                  enableTooltip: true,
                 ),
               ],
+              tooltipBehavior: TooltipBehavior(
+                enable: true,
+                activationMode: ActivationMode.singleTap,
+                header: '',
+                canShowMarker: false,
+                builder: (dynamic data, dynamic point, dynamic series, int pointIndex, int seriesIndex) {
+                  final streak = streaks[pointIndex];
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: colors.surface,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: barColors[pointIndex % barColors.length]),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.15),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      '${streak.name}\\n${streak.currentStreak} day streak',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: colors.ink,
+                        fontFamily: 'SpaceMono',
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],

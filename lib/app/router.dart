@@ -173,7 +173,18 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: '/journal/new',
           name: 'createJournal',
-          builder: (context, state) => const CreateJournalScreen(),
+          builder: (context, state) {
+            final entryId = state.uri.queryParameters['id'];
+            return CreateJournalScreen(entryId: entryId);
+          },
+        ),
+        GoRoute(
+          path: '/journal/:entryId/edit',
+          name: 'editJournal',
+          builder: (context, state) {
+            final entryId = state.pathParameters['entryId'];
+            return CreateJournalScreen(entryId: entryId);
+          },
         ),
         GoRoute(
           path: '/journal/intelligence',

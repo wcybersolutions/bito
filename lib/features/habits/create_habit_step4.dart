@@ -40,40 +40,87 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
           children: [
             _buildHeader(context),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(
-                      'Looking good!',
-                      style: textTheme.headlineSmall?.copyWith(
-                        color: colors.ink,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: colors.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: colors.line),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildCardHeader(context, colors, textTheme),
+                      _buildProgress(context),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Looking good!',
+                                style: textTheme.headlineSmall?.copyWith(
+                                  color: colors.ink,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                widget.isEditing
+                                    ? 'Review your changes and save'
+                                    : 'Confirm your habit and set a reminder if you\'d like.',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: colors.ink2,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              _buildHabitSummary(context, colors, creationState),
+                              const SizedBox(height: 16),
+                              _buildReminderSection(context, colors),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      widget.isEditing
-                          ? 'Review your changes and save'
-                          : 'Confirm your habit and set a reminder if you\'d like.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: colors.ink2,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    _buildHabitSummary(context, colors, creationState),
-                    const SizedBox(height: 24),
-                    _buildReminderSection(context, colors),
-                    const SizedBox(height: 32),
-                  ],
+                      _buildBottomActions(context),
+                    ],
+                  ),
                 ),
               ),
             ),
-            _buildBottomActions(context),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCardHeader(
+      BuildContext context,
+      BitoColorScheme colors,
+      TextTheme textTheme,
+      ) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            widget.isEditing ? 'Edit Habit' : 'New Habit',
+            style: textTheme.headlineSmall?.copyWith(
+              color: colors.ink,
+            ),
+          ),
+          IconButton(
+            onPressed: () => context.go('/habits'),
+            icon: Icon(
+              PhosphorIcons.x(),
+              size: 20,
+              color: colors.ink2,
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+        ],
       ),
     );
   }
@@ -88,8 +135,8 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(11),
+        color: colors.surface2,
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: colors.line),
       ),
       child: Column(
@@ -184,7 +231,7 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
                 Text(
                   'REMINDER',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 10,
                     fontWeight: FontWeight.w700,
                     color: colors.ink3,
                     letterSpacing: 1.2,
@@ -215,43 +262,30 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
           ],
         ),
         if (_hasReminder) ...[
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           GestureDetector(
             onTap: () async {
-              await showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                enableDrag: true,
-                barrierColor: Colors.black.withValues(alpha: 0.3),
-                builder: (context) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: _DigitalTimePicker(
-                      initialTime: _selectedTime,
-                      onTimeSelected: (time) {
-                        setState(() {
-                          _selectedTime = time;
-                          ref
-                              .read(habitCreationProvider.notifier)
-                              .updateReminderTime(time);
-                        });
-                      },
-                    ),
-                  );
-                },
+              final picked = await DigitalTimePicker.show(
+                context,
+                initialTime: _selectedTime,
               );
+              if (picked != null) {
+                setState(() {
+                  _selectedTime = picked;
+                  ref
+                      .read(habitCreationProvider.notifier)
+                      .updateReminderTime(picked);
+                });
+              }
             },
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
-                vertical: 14,
+                vertical: 12,
               ),
               decoration: BoxDecoration(
                 color: colors.surface,
-                borderRadius: BorderRadius.circular(11),
+                borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: colors.line),
               ),
               child: Row(
@@ -261,10 +295,10 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
                     children: [
                       Icon(
                         PhosphorIcons.clock(),
-                        size: 20,
+                        size: 18,
                         color: colors.ink2,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       Text(
                         'Reminder time',
                         style: TextStyle(
@@ -287,7 +321,7 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
                       const SizedBox(width: 4),
                       Icon(
                         PhosphorIcons.caretDown(),
-                        size: 16,
+                        size: 14,
                         color: colors.ink3,
                       ),
                     ],
@@ -373,65 +407,20 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () => context.go('/habits'),
-                    icon: Icon(
-                      PhosphorIcons.arrowLeft(),
-                      size: 20,
-                      color: colors.ink,
-                    ),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.isEditing ? 'Edit • Tracker' : 'New Entry • Tracker',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: colors.ink3,
-                          letterSpacing: 0.5,
-                          fontFamily: 'SpaceMono',
-                        ),
-                      ),
-                      Text(
-                        'Habits',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: colors.ink,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              IconButton(
-                onPressed: () => context.go('/habits'),
-                icon: Icon(
-                  PhosphorIcons.x(),
-                  size: 20,
-                  color: colors.ink2,
-                ),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-            ],
+          Text(
+            'HABIT SETUP',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: colors.ink3,
+              letterSpacing: 1.2,
+              fontFamily: 'SpaceMono',
+            ),
           ),
-          const SizedBox(height: 8),
-          _buildProgress(context),
+          const SizedBox(),
         ],
       ),
     );
@@ -442,37 +431,40 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
     final steps = ['WHAT', 'WHEN', 'STYLE', 'GO'];
     const activeStep = 3;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(steps.length, (index) {
-        final isActive = index <= activeStep;
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 6),
-          child: Column(
-            children: [
-              Container(
-                width: 28,
-                height: isActive ? 3 : 2,
-                decoration: BoxDecoration(
-                  color: isActive ? colors.signal2 : colors.line2,
-                  borderRadius: BorderRadius.circular(1.5),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(steps.length, (index) {
+          final isActive = index <= activeStep;
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            child: Column(
+              children: [
+                Container(
+                  width: 60,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: isActive ? colors.signal2 : colors.line2,
+                    borderRadius: BorderRadius.circular(1.5),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                steps[index],
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w700,
-                  color: isActive ? colors.signal2 : colors.ink3,
-                  letterSpacing: 0.5,
-                  fontFamily: 'SpaceMono',
+                const SizedBox(height: 4),
+                Text(
+                  steps[index],
+                  style: TextStyle(
+                    fontSize: 7,
+                    fontWeight: FontWeight.w700,
+                    color: isActive ? colors.signal2 : colors.ink3,
+                    letterSpacing: 0.5,
+                    fontFamily: 'SpaceMono',
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      }),
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 
@@ -480,9 +472,8 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
-        color: colors.bg,
         border: Border(
           top: BorderSide(color: colors.line),
         ),
@@ -567,6 +558,7 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
       icon: creationState.icon,
       color: creationState.color,
       target: creationState.target,
+      category: creationState.category,
     );
 
     try {
@@ -579,6 +571,7 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
           icon: params.icon,
           color: params.color,
           target: params.target,
+          category: creationState.category,
         );
         final repository = ref.read(habitRepositoryProvider);
         await repository.updateHabit(creationState.id, updateParams);
@@ -611,283 +604,4 @@ class _CreateHabitStep4State extends ConsumerState<CreateHabitStep4> {
   }
 }
 
-// ============================================================
-// Digital Time Picker - Small Floating Card
-// ============================================================
 
-class _DigitalTimePicker extends StatefulWidget {
-  final TimeOfDay initialTime;
-  final ValueChanged<TimeOfDay> onTimeSelected;
-
-  const _DigitalTimePicker({
-    required this.initialTime,
-    required this.onTimeSelected,
-  });
-
-  @override
-  State<_DigitalTimePicker> createState() => _DigitalTimePickerState();
-}
-
-class _DigitalTimePickerState extends State<_DigitalTimePicker> {
-  late int _hour;
-  late int _minute;
-  late bool _isAM;
-
-  @override
-  void initState() {
-    super.initState();
-    _hour = widget.initialTime.hour;
-    _minute = widget.initialTime.minute;
-    _isAM = _hour < 12;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).extension<BitoColorScheme>()!;
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    return Center(
-      child: Container(
-        width: screenWidth * 0.85,
-        constraints: const BoxConstraints(maxWidth: 360), // Fixed: use constraints
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: colors.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: colors.line, width: 0.5),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Handle bar
-            Container(
-              width: 36,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(
-                color: colors.line2,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            // Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: Text(
-                    'Cancel',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: colors.ink3,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Text(
-                  'Select Time',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: colors.ink,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    widget.onTimeSelected(TimeOfDay(hour: _hour, minute: _minute));
-                    Navigator.pop(context);
-                  },
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: Text(
-                    'Done',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: colors.signal,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            // Digital time display - Compact
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Hour
-                _buildCompactNumberPicker(
-                  value: _hour,
-                  min: 0,
-                  max: 23,
-                  onChanged: (value) {
-                    setState(() {
-                      _hour = value;
-                      _isAM = _hour < 12;
-                    });
-                  },
-                  showHourFormat: true,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  ':',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: colors.ink,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                // Minute
-                _buildCompactNumberPicker(
-                  value: _minute,
-                  min: 0,
-                  max: 59,
-                  onChanged: (value) {
-                    setState(() {
-                      _minute = value;
-                    });
-                  },
-                  showHourFormat: false,
-                ),
-                const SizedBox(width: 12),
-                // AM/PM toggle - Compact
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildAMPMButton(
-                      label: 'AM',
-                      isSelected: _isAM,
-                      onTap: () {
-                        setState(() {
-                          if (_hour >= 12 && !_isAM) {
-                            _hour -= 12;
-                          }
-                          _isAM = true;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 4),
-                    _buildAMPMButton(
-                      label: 'PM',
-                      isSelected: !_isAM,
-                      onTap: () {
-                        setState(() {
-                          if (_hour < 12 && _isAM) {
-                            _hour += 12;
-                          }
-                          _isAM = false;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAMPMButton({
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    final colors = Theme.of(context).extension<BitoColorScheme>()!;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 26,
-        decoration: BoxDecoration(
-          color: isSelected ? colors.signal : colors.surface2,
-          borderRadius: BorderRadius.circular(6),
-          border: isSelected
-              ? null
-              : Border.all(color: colors.line2, width: 0.5),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: isSelected ? colors.signalInk : colors.ink3,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCompactNumberPicker({
-    required int value,
-    required int min,
-    required int max,
-    required ValueChanged<int> onChanged,
-    bool showHourFormat = false,
-  }) {
-    final colors = Theme.of(context).extension<BitoColorScheme>()!;
-
-    return Container(
-      height: 100,
-      width: 44,
-      decoration: BoxDecoration(
-        color: colors.bg,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: colors.line2, width: 0.5),
-      ),
-      child: ListWheelScrollView(
-        itemExtent: 28,
-        diameterRatio: 1.2,
-        perspective: 0.005,
-        offAxisFraction: 0,
-        children: List.generate(max - min + 1, (index) {
-          final number = min + index;
-          final isSelected = number == value;
-          final displayNumber = showHourFormat
-              ? (number == 0 ? 12 : (number > 12 ? number - 12 : number))
-              : number;
-          return Center(
-            child: Text(
-              displayNumber.toString().padLeft(2, '0'),
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: isSelected ? colors.signal : colors.ink3,
-              ),
-            ),
-          );
-        }),
-        onSelectedItemChanged: (index) {
-          final newValue = min + index;
-          if (newValue != value) {
-            onChanged(newValue);
-          }
-        },
-        controller: FixedExtentScrollController(
-          initialItem: value - min,
-        ),
-      ),
-    );
-  }
-}

@@ -45,15 +45,15 @@ extension JournalMoodExtension on JournalMood {
   Color get color {
     switch (this) {
       case JournalMood.terrible:
-        return Colors.red;
+        return const Color(0xFFEF4444); // Red
       case JournalMood.sad:
-        return Colors.orange;
+        return const Color(0xFFF97316); // Orange (red fades)
       case JournalMood.neutral:
-        return Colors.grey;
+        return const Color(0xFFEAB308); // Yellow
       case JournalMood.happy:
-        return Colors.green;
+        return const Color(0xFF84CC16); // Close to green (lime)
       case JournalMood.ecstatic:
-        return Colors.teal;
+        return const Color(0xFF22C55E); // Green
     }
   }
 }

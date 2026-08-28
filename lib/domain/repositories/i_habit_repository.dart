@@ -9,6 +9,7 @@ class CreateHabitParams {
   final String icon;
   final int color;
   final int? target;
+  final String? category;
 
   CreateHabitParams({
     required this.name,
@@ -18,6 +19,7 @@ class CreateHabitParams {
     required this.icon,
     required this.color,
     this.target,
+    this.category,
   });
 
   Map<String, dynamic> toJson() => {
@@ -28,6 +30,7 @@ class CreateHabitParams {
     'icon': icon,
     'color': color,
     'target': target,
+    'category': category,
   };
 }
 
@@ -39,6 +42,7 @@ class UpdateHabitParams {
   final String? icon;
   final int? color;
   final int? target;
+  final String? category;
 
   UpdateHabitParams({
     this.name,
@@ -48,6 +52,7 @@ class UpdateHabitParams {
     this.icon,
     this.color,
     this.target,
+    this.category,
   });
 
   Map<String, dynamic> toJson() {
@@ -59,6 +64,7 @@ class UpdateHabitParams {
     if (icon != null) map['icon'] = icon;
     if (color != null) map['color'] = color;
     if (target != null) map['target'] = target;
+    if (category != null) map['category'] = category;
     return map;
   }
 }

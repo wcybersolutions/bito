@@ -58,232 +58,261 @@ class _CreateHabitStep2State extends ConsumerState<CreateHabitStep2> {
           children: [
             _buildHeader(context),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(
-                      widget.isEditing ? 'EDIT HABIT' : 'STEP 2 OF 4',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: colors.signal,
-                        letterSpacing: 1.2,
-                        fontFamily: 'SpaceMono',
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'When will you do it?',
-                      style: textTheme.headlineSmall?.copyWith(
-                        color: colors.ink,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Daily habits have a fixed schedule. Weekly habits let you choose any days to hit your target.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: colors.ink2,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    // Frequency selection
-                    Row(
-                      children: [
-                        _buildFrequencyButton('Daily', _frequency == 'Daily'),
-                        const SizedBox(width: 12),
-                        _buildFrequencyButton('Weekly target', _frequency == 'Weekly target'),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Daily - Fixed schedule
-                    if (_frequency == 'Daily') ...[
-                      Text(
-                        'WHICH DAYS?',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: colors.ink3,
-                          letterSpacing: 1.2,
-                          fontFamily: 'SpaceMono',
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: _allDays.map((day) {
-                          final isSelected = _selectedDays.contains(day['value']);
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (isSelected) {
-                                  _selectedDays.remove(day['value']);
-                                } else {
-                                  _selectedDays.add(day['value']!);
-                                }
-                              });
-                            },
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: isSelected ? colors.signal : colors.surface,
-                                border: isSelected
-                                    ? null
-                                    : Border.all(color: colors.line2),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: colors.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: colors.line),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildCardHeader(context, colors, textTheme),
+                      _buildProgress(context),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'FREQUENCY',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: colors.ink3,
+                                  letterSpacing: 1.2,
+                                  fontFamily: 'SpaceMono',
+                                ),
                               ),
-                              child: Center(
-                                child: Text(
-                                  day['label']!,
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  _buildFrequencyButton('Daily', _frequency == 'Daily'),
+                                  const SizedBox(width: 12),
+                                  _buildFrequencyButton('Weekly target', _frequency == 'Weekly target'),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+
+                              if (_frequency == 'Daily') ...[
+                                Text(
+                                  'WHICH DAYS?',
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w700,
-                                    color: isSelected ? colors.signalInk : colors.ink2,
+                                    color: colors.ink3,
+                                    letterSpacing: 1.2,
+                                    fontFamily: 'SpaceMono',
                                   ),
                                 ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
+                                const SizedBox(height: 12),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: _allDays.map((day) {
+                                    final isSelected = _selectedDays.contains(day['value']);
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          if (isSelected) {
+                                            _selectedDays.remove(day['value']);
+                                          } else {
+                                            _selectedDays.add(day['value']!);
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: isSelected ? colors.signal : colors.surface,
+                                          border: isSelected
+                                              ? null
+                                              : Border.all(color: colors.line2),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            day['label']!,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
+                                              color: isSelected ? colors.signalInk : colors.ink2,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
 
-                    // Weekly - Flexible target
-                    if (_frequency == 'Weekly target') ...[
-                      Text(
-                        'Complete on any',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: colors.ink3,
-                          letterSpacing: 1.2,
-                          fontFamily: 'SpaceMono',
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(11),
-                              border: Border.all(color: colors.line),
-                              color: colors.surface,
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (_weeklyTarget > 1) {
-                                    _weeklyTarget--;
-                                  }
-                                });
-                              },
-                              borderRadius: BorderRadius.circular(11),
-                              child: Center(
-                                child: Icon(
-                                  PhosphorIcons.minus(),
-                                  size: 20,
-                                  color: _weeklyTarget > 1 ? colors.ink : colors.ink3,
+                              if (_frequency == 'Weekly target') ...[
+                                Text(
+                                  'COMPLETE ON ANY',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    color: colors.ink3,
+                                    letterSpacing: 1.2,
+                                    fontFamily: 'SpaceMono',
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Text(
-                            '$_weeklyTarget',
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              color: colors.ink,
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(11),
-                              border: Border.all(color: colors.line),
-                              color: colors.surface,
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (_weeklyTarget < 7) {
-                                    _weeklyTarget++;
-                                  }
-                                });
-                              },
-                              borderRadius: BorderRadius.circular(11),
-                              child: Center(
-                                child: Icon(
-                                  PhosphorIcons.plus(),
-                                  size: 20,
-                                  color: _weeklyTarget < 7 ? colors.ink : colors.ink3,
+                                const SizedBox(height: 12),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 44,
+                                      height: 44,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(11),
+                                        border: Border.all(color: colors.line),
+                                        color: colors.surface,
+                                      ),
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            if (_weeklyTarget > 1) {
+                                              _weeklyTarget--;
+                                            }
+                                          });
+                                        },
+                                        borderRadius: BorderRadius.circular(11),
+                                        child: Center(
+                                          child: Icon(
+                                            PhosphorIcons.minus(),
+                                            size: 20,
+                                            color: _weeklyTarget > 1 ? colors.ink : colors.ink3,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    Text(
+                                      '$_weeklyTarget',
+                                      style: TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w700,
+                                        color: colors.ink,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    Container(
+                                      width: 44,
+                                      height: 44,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(11),
+                                        border: Border.all(color: colors.line),
+                                        color: colors.surface,
+                                      ),
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            if (_weeklyTarget < 7) {
+                                              _weeklyTarget++;
+                                            }
+                                          });
+                                        },
+                                        borderRadius: BorderRadius.circular(11),
+                                        child: Center(
+                                          child: Icon(
+                                            PhosphorIcons.plus(),
+                                            size: 20,
+                                            color: _weeklyTarget < 7 ? colors.ink : colors.ink3,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Center(
-                        child: Text(
-                          'days/week',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                            color: colors.ink3,
-                            letterSpacing: 0.3,
-                            fontFamily: 'SpaceMono',
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: colors.surface2,
-                          borderRadius: BorderRadius.circular(11),
-                          border: Border.all(color: colors.line),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              PhosphorIcons.info(),
-                              size: 16,
-                              color: colors.ink3,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                'No fixed schedule — pick any $_weeklyTarget days each week. Your streak counts consecutive weeks where you meet the target.',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  height: 1.5,
-                                  color: colors.ink2,
+                                const SizedBox(height: 4),
+                                Center(
+                                  child: Text(
+                                    'days/week',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w500,
+                                      color: colors.ink3,
+                                      letterSpacing: 0.3,
+                                      fontFamily: 'SpaceMono',
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
+                                const SizedBox(height: 16),
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: colors.surface2,
+                                    borderRadius: BorderRadius.circular(11),
+                                    border: Border.all(color: colors.line),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        PhosphorIcons.info(),
+                                        size: 16,
+                                        color: colors.ink3,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          'No fixed schedule — pick any $_weeklyTarget days each week. Your streak counts consecutive weeks where you meet the target.',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            height: 1.5,
+                                            color: colors.ink2,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
                         ),
                       ),
+                      _buildBottomActions(context),
                     ],
-                    const SizedBox(height: 32),
-                  ],
+                  ),
                 ),
               ),
             ),
-            _buildBottomActions(context),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCardHeader(
+      BuildContext context,
+      BitoColorScheme colors,
+      TextTheme textTheme,
+      ) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            widget.isEditing ? 'Edit Habit' : 'New Habit',
+            style: textTheme.headlineSmall?.copyWith(
+              color: colors.ink,
+            ),
+          ),
+          IconButton(
+            onPressed: () => context.go('/habits'),
+            icon: Icon(
+              PhosphorIcons.x(),
+              size: 20,
+              color: colors.ink2,
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+        ],
       ),
     );
   }
@@ -293,65 +322,20 @@ class _CreateHabitStep2State extends ConsumerState<CreateHabitStep2> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () => context.go('/habits'),
-                    icon: Icon(
-                      PhosphorIcons.arrowLeft(),
-                      size: 20,
-                      color: colors.ink,
-                    ),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.isEditing ? 'Edit • Tracker' : 'New Entry • Tracker',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: colors.ink3,
-                          letterSpacing: 0.5,
-                          fontFamily: 'SpaceMono',
-                        ),
-                      ),
-                      Text(
-                        'Habits',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: colors.ink,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              IconButton(
-                onPressed: () => context.go('/habits'),
-                icon: Icon(
-                  PhosphorIcons.x(),
-                  size: 20,
-                  color: colors.ink2,
-                ),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-            ],
+          Text(
+            'HABIT SETUP',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: colors.ink3,
+              letterSpacing: 1.2,
+              fontFamily: 'SpaceMono',
+            ),
           ),
-          const SizedBox(height: 8),
-          _buildProgress(context),
+          const SizedBox(),
         ],
       ),
     );
@@ -362,37 +346,40 @@ class _CreateHabitStep2State extends ConsumerState<CreateHabitStep2> {
     final steps = ['WHAT', 'WHEN', 'STYLE', 'GO'];
     const activeStep = 1;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(steps.length, (index) {
-        final isActive = index <= activeStep;
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 6),
-          child: Column(
-            children: [
-              Container(
-                width: 28,
-                height: isActive ? 3 : 2,
-                decoration: BoxDecoration(
-                  color: isActive ? colors.signal2 : colors.line2,
-                  borderRadius: BorderRadius.circular(1.5),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(steps.length, (index) {
+          final isActive = index <= activeStep;
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            child: Column(
+              children: [
+                Container(
+                  width: 60,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: isActive ? colors.signal2 : colors.line2,
+                    borderRadius: BorderRadius.circular(1.5),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                steps[index],
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w700,
-                  color: isActive ? colors.signal2 : colors.ink3,
-                  letterSpacing: 0.5,
-                  fontFamily: 'SpaceMono',
+                const SizedBox(height: 4),
+                Text(
+                  steps[index],
+                  style: TextStyle(
+                    fontSize: 7,
+                    fontWeight: FontWeight.w700,
+                    color: isActive ? colors.signal2 : colors.ink3,
+                    letterSpacing: 0.5,
+                    fontFamily: 'SpaceMono',
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      }),
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 
@@ -414,7 +401,7 @@ class _CreateHabitStep2State extends ConsumerState<CreateHabitStep2> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             color: selected ? colors.signal2 : colors.surface,
-            borderRadius: BorderRadius.circular(11),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: selected ? colors.signal2 : colors.line,
             ),
@@ -439,9 +426,8 @@ class _CreateHabitStep2State extends ConsumerState<CreateHabitStep2> {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
-        color: colors.bg,
         border: Border(
           top: BorderSide(color: colors.line),
         ),
@@ -468,7 +454,6 @@ class _CreateHabitStep2State extends ConsumerState<CreateHabitStep2> {
           ),
           ElevatedButton(
             onPressed: () {
-              // Save state
               final cadence = _frequency == 'Daily'
                   ? HabitCadence.daily
                   : HabitCadence.weekly;
@@ -520,4 +505,3 @@ class _CreateHabitStep2State extends ConsumerState<CreateHabitStep2> {
     );
   }
 }
-

@@ -26,6 +26,7 @@ class Habit extends Equatable {
   final int? progress;
   final DateTime createdAt;
   final DateTime? updatedAt;
+  final String? category;
 
   const Habit({
     required this.id,
@@ -41,6 +42,7 @@ class Habit extends Equatable {
     this.progress,
     required this.createdAt,
     this.updatedAt,
+    this.category,
   });
 
   Habit copyWith({
@@ -57,6 +59,7 @@ class Habit extends Equatable {
     int? progress,
     DateTime? createdAt,
     DateTime? updatedAt,
+    String? category,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -72,6 +75,7 @@ class Habit extends Equatable {
       progress: progress ?? this.progress,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      category: category ?? this.category,
     );
   }
 
@@ -96,6 +100,7 @@ class Habit extends Equatable {
     progress,
     createdAt,
     updatedAt,
+    category,
   ];
 }
 
