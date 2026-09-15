@@ -10,10 +10,7 @@ import 'package:bito/features/groups/widgets/add_group_habit_sheet.dart';
 class HabitsTab extends ConsumerWidget {
   final String groupId;
 
-  const HabitsTab({
-    super.key,
-    required this.groupId,
-  });
+  const HabitsTab({super.key, required this.groupId});
 
   IconData _getHabitIcon(String iconName) {
     switch (iconName) {
@@ -74,11 +71,7 @@ class HabitsTab extends ConsumerWidget {
               ),
               OutlinedButton.icon(
                 onPressed: () => AddGroupHabitSheet.show(context, groupId),
-                icon: Icon(
-                  PhosphorIcons.plus(),
-                  size: 13,
-                  color: colors.ink,
-                ),
+                icon: Icon(PhosphorIcons.plus(), size: 13, color: colors.ink),
                 label: Text(
                   'CREATE HABIT',
                   style: TextStyle(
@@ -90,8 +83,10 @@ class HabitsTab extends ConsumerWidget {
                   ),
                 ),
                 style: OutlinedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   side: BorderSide(color: colors.line),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
@@ -110,9 +105,14 @@ class HabitsTab extends ConsumerWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: habits.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                return _buildGroupHabitCard(context, ref, colors, habits[index]);
+                return _buildGroupHabitCard(
+                  context,
+                  ref,
+                  colors,
+                  habits[index],
+                );
               },
             ),
           const SizedBox(height: 24),
@@ -161,19 +161,12 @@ class HabitsTab extends ConsumerWidget {
           Text(
             'Add the first habit to set the pace for the group',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: colors.ink3,
-            ),
+            style: TextStyle(fontSize: 12, color: colors.ink3),
           ),
           const SizedBox(height: 20),
           ElevatedButton.icon(
             onPressed: () => AddGroupHabitSheet.show(context, groupId),
-            icon: Icon(
-              PhosphorIcons.plus(),
-              size: 14,
-              color: Colors.black,
-            ),
+            icon: Icon(PhosphorIcons.plus(), size: 14, color: Colors.black),
             label: const Text(
               'CREATE GROUP HABIT',
               style: TextStyle(
@@ -187,8 +180,7 @@ class HabitsTab extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: colors.signal2,
               foregroundColor: Colors.black,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -268,11 +260,14 @@ class HabitsTab extends ConsumerWidget {
                       .toggleAdopt(groupId, habit.id);
                 },
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
-                    color:
-                        habit.isAdopted ? colors.surface2 : Colors.transparent,
+                    color: habit.isAdopted
+                        ? colors.surface2
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: habit.isAdopted ? colors.line : colors.line2,

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:bito/theme/theme_extensions.dart';
 import 'package:bito/shared/shared.dart';
 import 'package:bito/data/groups/groups_provider.dart';
 
@@ -67,7 +66,7 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildColorSelector(context, colors,textTheme),
+                              _buildColorSelector(context, colors, textTheme),
                               const SizedBox(height: 16),
                             ],
                           ),
@@ -86,10 +85,10 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
   }
 
   Widget _buildHeader(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
@@ -127,10 +126,7 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
     );
   }
 
-  Widget _buildProgress(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildProgress(BuildContext context, BitoColorScheme colors) {
     final steps = ['DETAILS', 'STYLE', 'SETTINGS'];
     const activeStep = 1;
 
@@ -172,10 +168,10 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
   }
 
   Widget _buildCardHeader(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -183,17 +179,11 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
         children: [
           Text(
             'New Group',
-            style: textTheme.headlineSmall?.copyWith(
-              color: colors.ink,
-            ),
+            style: textTheme.headlineSmall?.copyWith(color: colors.ink),
           ),
           IconButton(
             onPressed: () => context.go('/groups'),
-            icon: Icon(
-              PhosphorIcons.x(),
-              size: 20,
-              color: colors.ink2,
-            ),
+            icon: Icon(PhosphorIcons.x(), size: 20, color: colors.ink2),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
           ),
@@ -202,12 +192,11 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
     );
   }
 
-
   Widget _buildColorSelector(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -254,10 +243,10 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
   }
 
   Widget _buildGroupPreview(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+  ) {
     final lightColor = _selectedColor.withOpacity(0.15);
     return Container(
       padding: const EdgeInsets.all(16),
@@ -275,11 +264,7 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
               color: _selectedColor.withOpacity(0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              PhosphorIcons.users(),
-              size: 24,
-              color: _selectedColor,
-            ),
+            child: Icon(PhosphorIcons.users(), size: 24, color: _selectedColor),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -312,16 +297,11 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
     );
   }
 
-  Widget _buildBottomActions(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildBottomActions(BuildContext context, BitoColorScheme colors) {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: colors.line),
-        ),
+        border: Border(top: BorderSide(color: colors.line)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -329,11 +309,7 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
           ActionButton(
             text: 'BACK',
             type: ButtonType.outline,
-            icon: Icon(
-              PhosphorIcons.arrowLeft(),
-              size: 16,
-              color: colors.ink2,
-            ),
+            icon: Icon(PhosphorIcons.arrowLeft(), size: 16, color: colors.ink2),
             onPressed: () => context.go('/groups/create/step1'),
             expanded: false,
           ),
@@ -365,11 +341,7 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
-                  PhosphorIcons.arrowRight(),
-                  size: 16,
-                  color: Colors.black,
-                ),
+                Icon(PhosphorIcons.arrowRight(), size: 16, color: Colors.black),
               ],
             ),
           ),
@@ -378,4 +350,3 @@ class _CreateGroupStep2State extends ConsumerState<CreateGroupStep2> {
     );
   }
 }
-

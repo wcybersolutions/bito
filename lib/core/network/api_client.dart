@@ -15,29 +15,33 @@ class ApiClient {
   factory ApiClient() => _instance;
 
   ApiClient._internal() {
-    _dio = Dio(BaseOptions(
-      baseUrl: ApiConstants.baseApiUrl,
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    ));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: ApiConstants.baseApiUrl,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
 
     // Add interceptors
     _dio.interceptors.add(ApiInterceptor(_secureStorage));
 
     // Add logging in debug mode
     if (kDebugMode) {
-      _dio.interceptors.add(LogInterceptor(
-        request: true,
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          request: true,
+          requestHeader: true,
+          requestBody: true,
+          responseHeader: true,
+          responseBody: true,
+          error: true,
+        ),
+      );
     }
   }
 
@@ -45,12 +49,12 @@ class ApiClient {
 
   // Generic GET
   Future<Response> get(
-      String path, {
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onReceiveProgress,
-      }) async {
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     try {
       return await _dio.get(
         path,
@@ -66,14 +70,14 @@ class ApiClient {
 
   // Generic POST
   Future<Response> post(
-      String path, {
-        dynamic data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onSendProgress,
-        ProgressCallback? onReceiveProgress,
-      }) async {
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     try {
       return await _dio.post(
         path,
@@ -91,14 +95,14 @@ class ApiClient {
 
   // Generic PUT
   Future<Response> put(
-      String path, {
-        dynamic data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onSendProgress,
-        ProgressCallback? onReceiveProgress,
-      }) async {
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     try {
       return await _dio.put(
         path,
@@ -116,14 +120,14 @@ class ApiClient {
 
   // Generic PATCH
   Future<Response> patch(
-      String path, {
-        dynamic data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onSendProgress,
-        ProgressCallback? onReceiveProgress,
-      }) async {
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     try {
       return await _dio.patch(
         path,
@@ -141,12 +145,12 @@ class ApiClient {
 
   // Generic DELETE
   Future<Response> delete(
-      String path, {
-        dynamic data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-      }) async {
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
     try {
       return await _dio.delete(
         path,
@@ -215,29 +219,29 @@ class ApiException implements Exception {
 }
 
 class BadRequestException extends ApiException {
-  BadRequestException(String message) : super(message, statusCode: 400);
+  BadRequestException(super.message) : super(statusCode: 400);
 }
 
 class UnauthorizedException extends ApiException {
-  UnauthorizedException(String message) : super(message, statusCode: 401);
+  UnauthorizedException(super.message) : super(statusCode: 401);
 }
 
 class ForbiddenException extends ApiException {
-  ForbiddenException(String message) : super(message, statusCode: 403);
+  ForbiddenException(super.message) : super(statusCode: 403);
 }
 
 class NotFoundException extends ApiException {
-  NotFoundException(String message) : super(message, statusCode: 404);
+  NotFoundException(super.message) : super(statusCode: 404);
 }
 
 class RateLimitException extends ApiException {
-  RateLimitException(String message) : super(message, statusCode: 429);
+  RateLimitException(super.message) : super(statusCode: 429);
 }
 
 class ServerException extends ApiException {
-  ServerException(String message) : super(message, statusCode: 500);
+  ServerException(super.message) : super(statusCode: 500);
 }
 
 class NetworkException extends ApiException {
-  NetworkException(String message) : super(message);
+  NetworkException(super.message);
 }

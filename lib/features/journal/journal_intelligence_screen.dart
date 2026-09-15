@@ -8,7 +8,8 @@ class JournalIntelligenceScreen extends StatefulWidget {
   const JournalIntelligenceScreen({super.key});
 
   @override
-  State<JournalIntelligenceScreen> createState() => _JournalIntelligenceScreenState();
+  State<JournalIntelligenceScreen> createState() =>
+      _JournalIntelligenceScreenState();
 }
 
 class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
@@ -55,11 +56,7 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
                   ),
                   IconButton(
                     onPressed: () => context.go('/journal'),
-                    icon: Icon(
-                      PhosphorIcons.x(),
-                      size: 20,
-                      color: colors.ink2,
-                    ),
+                    icon: Icon(PhosphorIcons.x(), size: 20, color: colors.ink2),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
@@ -77,11 +74,7 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      PhosphorIcons.lock(),
-                      size: 16,
-                      color: colors.ink3,
-                    ),
+                    Icon(PhosphorIcons.lock(), size: 16, color: colors.ink3),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -110,7 +103,8 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
                       context,
                       title: 'Pattern Nudges',
                       tier: 'T1',
-                      description: 'Detect patterns from your mood scores and tags — no content reading. You\'ll see gentle nudges like "You\'ve been in a great mood this week!"',
+                      description:
+                          'Detect patterns from your mood scores and tags — no content reading. You\'ll see gentle nudges like "You\'ve been in a great mood this week!"',
                       tags: 'Mood, energy, tags, entry frequency',
                       isEnabled: _patternNudgesEnabled,
                       onToggle: (value) {
@@ -125,7 +119,8 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
                       context,
                       title: 'Content Insights',
                       tier: 'T2',
-                      description: 'AI reads your journal text to surface deeper themes, correlations, and habit connections. This feature is still in development — your choice here is saved as consent for when it ships; no journal text is read until then.',
+                      description:
+                          'AI reads your journal text to surface deeper themes, correlations, and habit connections. This feature is still in development — your choice here is saved as consent for when it ships; no journal text is read until then.',
                       tags: 'All journal text content + metadata',
                       isEnabled: _contentInsightsEnabled,
                       onToggle: (value) {
@@ -140,7 +135,8 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
                       context,
                       title: 'Weekly Narratives',
                       tier: 'T3',
-                      description: 'AI-generated weekly reflection summaries that weave together your habits, mood, and journal themes. This feature is still in development — your choice here is saved as consent for when it ships.',
+                      description:
+                          'AI-generated weekly reflection summaries that weave together your habits, mood, and journal themes. This feature is still in development — your choice here is saved as consent for when it ships.',
                       tags: 'All journal text + habit data + mood trends',
                       isEnabled: _weeklyNarrativesEnabled,
                       onToggle: (value) {
@@ -163,7 +159,7 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
                                   _aiActive = value;
                                 });
                               },
-                              activeColor: colors.signal,
+                              activeThumbColor: colors.signal,
                             ),
                             Text(
                               'AI Active',
@@ -189,7 +185,10 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: colors.signal,
                             foregroundColor: Colors.black,
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 10,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -220,15 +219,15 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
   }
 
   Widget _buildIntelligenceCard(
-      BuildContext context, {
-        required String title,
-        required String tier,
-        required String description,
-        required String tags,
-        required bool isEnabled,
-        required ValueChanged<bool> onToggle,
-        bool isComingSoon = false,
-      }) {
+    BuildContext context, {
+    required String title,
+    required String tier,
+    required String description,
+    required String tags,
+    required bool isEnabled,
+    required ValueChanged<bool> onToggle,
+    bool isComingSoon = false,
+  }) {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
     final textTheme = Theme.of(context).textTheme;
 
@@ -256,7 +255,10 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: isComingSoon ? colors.line2 : colors.signal,
                       borderRadius: BorderRadius.circular(4),
@@ -274,7 +276,10 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
                   ),
                   if (isComingSoon)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: colors.line2,
                         borderRadius: BorderRadius.circular(4),
@@ -295,18 +300,14 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
               Switch(
                 value: isEnabled,
                 onChanged: onToggle,
-                activeColor: colors.signal,
+                activeThumbColor: colors.signal,
               ),
             ],
           ),
           const SizedBox(height: 8),
           Text(
             description,
-            style: TextStyle(
-              fontSize: 13,
-              height: 1.5,
-              color: colors.ink2,
-            ),
+            style: TextStyle(fontSize: 13, height: 1.5, color: colors.ink2),
           ),
           const SizedBox(height: 8),
           Container(
@@ -331,4 +332,3 @@ class _JournalIntelligenceScreenState extends State<JournalIntelligenceScreen> {
     );
   }
 }
-

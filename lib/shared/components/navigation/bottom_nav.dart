@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:bito/theme/theme_extensions.dart';
-import 'package:bito/theme/radius.dart';
 import 'package:bito/shared/components/create_sheet.dart';
 
 class BottomNav extends StatelessWidget {
@@ -92,12 +91,7 @@ class BottomNav extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: colors.line,
-              width: 1.5,
-            ),
-          ),
+          border: Border(top: BorderSide(color: colors.line, width: 1.5)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -125,11 +119,7 @@ class BottomNav extends StatelessWidget {
                     child: const SizedBox(
                       width: 48,
                       height: 48,
-                      child: Icon(
-                        Icons.add,
-                        size: 24,
-                        color: Colors.black,
-                      ),
+                      child: Icon(Icons.add, size: 24, color: Colors.black),
                     ),
                   ),
                 ),
@@ -153,5 +143,3 @@ class BottomNav extends StatelessWidget {
     );
   }
 }
-
-

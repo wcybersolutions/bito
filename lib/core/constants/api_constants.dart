@@ -2,7 +2,7 @@ class ApiConstants {
   // Base URL - will be replaced with env variables
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://localhost:5000',
+    defaultValue: 'https://bitostaging-production.up.railway.app',
   );
 
   static const String apiVersion = '/api/v1';
@@ -21,7 +21,8 @@ class ApiConstants {
   static const String users = '$baseApiUrl/users';
   static const String userProfile = '$baseApiUrl/users/profile';
   static const String userStats = '$baseApiUrl/users/stats';
-  static const String userCompleteProfile = '$baseApiUrl/users/complete-profile';
+  static const String userCompleteProfile =
+      '$baseApiUrl/users/complete-profile';
   static const String userAvatar = '$baseApiUrl/users/avatar';
 
   // === HABITS ===
@@ -63,13 +64,17 @@ class ApiConstants {
 
   // === NOTIFICATIONS ===
   static const String notifications = '$baseApiUrl/notifications';
-  static const String notificationsPreferences = '$baseApiUrl/notifications/preferences';
-  static const String notificationsSubscribe = '$baseApiUrl/notifications/subscribe';
-  static const String notificationsUnread = '$baseApiUrl/notifications/unread-count';
+  static const String notificationsPreferences =
+      '$baseApiUrl/notifications/preferences';
+  static const String notificationsSubscribe =
+      '$baseApiUrl/notifications/subscribe';
+  static const String notificationsUnread =
+      '$baseApiUrl/notifications/unread-count';
 
   // === CHALLENGES ===
   static const String challenges = '$baseApiUrl/challenges';
-  static const String challengesLeaderboard = '$baseApiUrl/challenges/:id/leaderboard';
+  static const String challengesLeaderboard =
+      '$baseApiUrl/challenges/:id/leaderboard';
   static const String challengesJoin = '$baseApiUrl/challenges/:id/join';
 
   // === FEED ===

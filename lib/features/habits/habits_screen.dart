@@ -34,7 +34,7 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
     'Mindfulness',
     'Social',
     'Creative',
-    'Other'
+    'Other',
   ];
 
   @override
@@ -56,78 +56,68 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
       appBar: AppBar(
         title: _isSearching
             ? Container(
-          height: 40,
-          decoration: BoxDecoration(
-            color: colors.surface,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: colors.line),
-          ),
-          child: TextField(
-            controller: _searchController,
-            focusNode: _searchFocusNode,
-            onChanged: (value) {
-              setState(() {
-                _searchQuery = value.toLowerCase().trim();
-              });
-            },
-            style: TextStyle(
-              fontSize: 14,
-              color: colors.ink,
-            ),
-            decoration: InputDecoration(
-              hintText: 'Search habits...',
-              hintStyle: TextStyle(
-                color: colors.ink3,
-                fontSize: 14,
-              ),
-              prefixIcon: Icon(
-                PhosphorIcons.magnifyingGlass(),
-                size: 18,
-                color: colors.ink3,
-              ),
-              suffixIcon: _searchQuery.isNotEmpty
-                  ? IconButton(
-                onPressed: () {
-                  setState(() {
-                    _searchQuery = '';
-                    _searchController.clear();
-                  });
-                },
-                icon: Icon(
-                  PhosphorIcons.x(),
-                  size: 16,
-                  color: colors.ink3,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: colors.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: colors.line),
                 ),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
+                child: TextField(
+                  controller: _searchController,
+                  focusNode: _searchFocusNode,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value.toLowerCase().trim();
+                    });
+                  },
+                  style: TextStyle(fontSize: 14, color: colors.ink),
+                  decoration: InputDecoration(
+                    hintText: 'Search habits...',
+                    hintStyle: TextStyle(color: colors.ink3, fontSize: 14),
+                    prefixIcon: Icon(
+                      PhosphorIcons.magnifyingGlass(),
+                      size: 18,
+                      color: colors.ink3,
+                    ),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _searchQuery = '';
+                                _searchController.clear();
+                              });
+                            },
+                            icon: Icon(
+                              PhosphorIcons.x(),
+                              size: 16,
+                              color: colors.ink3,
+                            ),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                          )
+                        : null,
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                  ),
+                ),
               )
-                  : null,
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 8,
-              ),
-            ),
-          ),
-        )
             : Text(
-          'Habits',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: colors.ink,
-            letterSpacing: -0.5,
-          ),
-        ),
+                'Habits',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: colors.ink,
+                  letterSpacing: -0.5,
+                ),
+              ),
         backgroundColor: colors.bg,
         elevation: 0,
         leading: IconButton(
           onPressed: () => context.go('/'),
-          icon: Icon(
-            PhosphorIcons.arrowLeft(),
-            size: 20,
-            color: colors.ink,
-          ),
+          icon: Icon(PhosphorIcons.arrowLeft(), size: 20, color: colors.ink),
         ),
         actions: [
           IconButton(
@@ -146,17 +136,46 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
               });
             },
             icon: Icon(
-              _isSearching ? PhosphorIcons.x() : PhosphorIcons.magnifyingGlass(),
+              _isSearching
+                  ? PhosphorIcons.x()
+                  : PhosphorIcons.magnifyingGlass(),
               color: _isSearching ? colors.ink : colors.ink2,
             ),
           ),
+          const SizedBox(width: 8),
+          GestureDetector(
+            onTap: () => GoRouter.of(context).push('/settings'),
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(9),
+                border: Border.all(color: colors.signal2),
+                color: colors.signal.withOpacity(0.1),
+              ),
+              child: Center(
+                child: Text(
+                  'MP',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: colors.signal,
+                    letterSpacing: 0.9,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
         ],
       ),
       body: habitsAsync.when(
         data: (habits) {
           if (completionStates.isEmpty && habits.isNotEmpty) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              ref.read(habitCompletionProvider.notifier).setInitialStates(habits);
+              ref
+                  .read(habitCompletionProvider.notifier)
+                  .setInitialStates(habits);
             });
           }
 
@@ -165,9 +184,7 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
 
           return Column(
             children: [
-              if (!_isSearching) ...[
-                _buildCategoryChips(colors),
-              ],
+              if (!_isSearching) ...[_buildCategoryChips(colors)],
               Expanded(
                 child: groupedHabits.isEmpty
                     ? _buildEmptyState(context, colors)
@@ -187,10 +204,7 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.go('/habits/create/step1'),
         backgroundColor: colors.signal2,
-        child: Icon(
-          PhosphorIcons.plus(),
-          color: Colors.black,
-        ),
+        child: Icon(PhosphorIcons.plus(), color: Colors.black),
       ),
     );
   }
@@ -264,12 +278,13 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
     final habitsAsync = ref.read(habitsProvider);
     habitsAsync.whenData((habits) {
       final filtered = _filterHabits(habits);
-      final index = filtered.indexWhere(
-            (habit) => habit.category == category,
-      );
+      final index = filtered.indexWhere((habit) => habit.category == category);
 
       if (index != -1 && mounted) {
-        final scrollPosition = (index * 80.0).clamp(0.0, _scrollController.position.maxScrollExtent);
+        final scrollPosition = (index * 80.0).clamp(
+          0.0,
+          _scrollController.position.maxScrollExtent,
+        );
         _scrollController.animateTo(
           scrollPosition,
           duration: const Duration(milliseconds: 300),
@@ -285,7 +300,8 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
     if (_searchQuery.isNotEmpty) {
       filtered = filtered.where((habit) {
         final nameMatch = habit.name.toLowerCase().contains(_searchQuery);
-        final descMatch = habit.description?.toLowerCase().contains(_searchQuery) ?? false;
+        final descMatch =
+            habit.description?.toLowerCase().contains(_searchQuery) ?? false;
         return nameMatch || descMatch;
       }).toList();
     }
@@ -295,7 +311,16 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
 
   Map<String, List<Habit>> _groupHabitsByCategory(List<Habit> habits) {
     final Map<String, List<Habit>> grouped = {};
-    final categories = ['Health', 'Fitness', 'Productivity', 'Learning', 'Mindfulness', 'Social', 'Creative', 'Other'];
+    final categories = [
+      'Health',
+      'Fitness',
+      'Productivity',
+      'Learning',
+      'Mindfulness',
+      'Social',
+      'Creative',
+      'Other',
+    ];
 
     for (final category in categories) {
       grouped[category] = [];
@@ -314,10 +339,10 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
   }
 
   Widget _buildHabitsList(
-      BuildContext context,
-      BitoColorScheme colors,
-      Map<String, List<Habit>> groupedHabits,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    Map<String, List<Habit>> groupedHabits,
+  ) {
     final completionStates = ref.watch(habitCompletionProvider);
 
     if (_isSearching || _searchQuery.isNotEmpty) {
@@ -362,11 +387,7 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
               child: Row(
                 children: [
                   if (isSelected)
-                    Container(
-                      width: 3,
-                      height: 16,
-                      color: colors.signal,
-                    ),
+                    Container(width: 3, height: 16, color: colors.signal),
                   if (isSelected) const SizedBox(width: 8),
                   Text(
                     category.toUpperCase(),
@@ -380,7 +401,10 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: colors.line2,
                       borderRadius: BorderRadius.circular(10),
@@ -397,7 +421,10 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
                   if (isSelected) ...[
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: colors.signal.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -419,15 +446,17 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
             ),
             const SizedBox(height: 8),
             ...habits.map((habit) {
-              final isCompleted = completionStates[habit.id] ?? habit.isCompleted;
+              final isCompleted =
+                  completionStates[habit.id] ?? habit.isCompleted;
               return _buildHabitCard(
                 context,
                 colors,
                 habit,
                 isCompleted,
-                isHighlighted: isSelected && habit.category == _selectedCategory,
+                isHighlighted:
+                    isSelected && habit.category == _selectedCategory,
               );
-            }).toList(),
+            }),
             const SizedBox(height: 16),
           ],
         );
@@ -436,12 +465,12 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
   }
 
   Widget _buildHabitCard(
-      BuildContext context,
-      BitoColorScheme colors,
-      Habit habit,
-      bool isCompleted, {
-        bool isHighlighted = false,
-      }) {
+    BuildContext context,
+    BitoColorScheme colors,
+    Habit habit,
+    bool isCompleted, {
+    bool isHighlighted = false,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
@@ -455,7 +484,9 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
       child: ListTile(
         leading: GestureDetector(
           onTap: () async {
-            await ref.read(habitCompletionProvider.notifier).toggleHabit(habit.id);
+            await ref
+                .read(habitCompletionProvider.notifier)
+                .toggleHabit(habit.id);
           },
           child: Container(
             width: 24,
@@ -484,10 +515,7 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
         ),
         subtitle: Text(
           '${_getBlockLabel(habit.block)} • ${_getCadenceLabel(habit.cadence)}',
-          style: TextStyle(
-            fontSize: 12,
-            color: colors.ink3,
-          ),
+          style: TextStyle(fontSize: 12, color: colors.ink3),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -516,18 +544,16 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
               onPressed: () {
                 context.go('/habits/${habit.id}/edit');
               },
-              icon: Icon(
-                PhosphorIcons.pencil(),
-                size: 16,
-                color: colors.ink3,
-              ),
+              icon: Icon(PhosphorIcons.pencil(), size: 16, color: colors.ink3),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),
           ],
         ),
         onTap: () async {
-          await ref.read(habitCompletionProvider.notifier).toggleHabit(habit.id);
+          await ref
+              .read(habitCompletionProvider.notifier)
+              .toggleHabit(habit.id);
         },
       ),
     );
@@ -565,10 +591,7 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
           Text(
             'Start building your routine by adding your first habit.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: colors.ink2,
-            ),
+            style: TextStyle(fontSize: 14, color: colors.ink2),
           ),
         ],
       ),
@@ -581,11 +604,7 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            PhosphorIcons.magnifyingGlass(),
-            size: 48,
-            color: colors.ink3,
-          ),
+          Icon(PhosphorIcons.magnifyingGlass(), size: 48, color: colors.ink3),
           const SizedBox(height: 16),
           Text(
             'No habits found',
@@ -598,10 +617,7 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
           const SizedBox(height: 8),
           Text(
             'Try adjusting your search',
-            style: TextStyle(
-              fontSize: 14,
-              color: colors.ink2,
-            ),
+            style: TextStyle(fontSize: 14, color: colors.ink2),
           ),
         ],
       ),

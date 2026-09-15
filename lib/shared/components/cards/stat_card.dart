@@ -23,33 +23,22 @@ class StatCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           if (icon != null) icon!,
 
           const SizedBox(height: BitoSpacing.sm),
 
-          Text(
-            value,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+          Text(value, style: Theme.of(context).textTheme.headlineMedium),
 
           const SizedBox(height: 4),
 
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          Text(title, style: Theme.of(context).textTheme.titleMedium),
 
           if (subtitle != null) ...[
             const SizedBox(height: 2),
-            Text(
-              subtitle!,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            Text(subtitle!, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ],
       ),
     );
   }
 }
-

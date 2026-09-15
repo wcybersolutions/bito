@@ -1,8 +1,6 @@
 // lib/features/dashboard/widgets/progress_card.dart
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-
-import '../../../../shared/components/cards/stat_card.dart';
 import 'package:bito/theme/theme_extensions.dart';
 
 class ProgressCard extends StatelessWidget {
@@ -21,17 +19,64 @@ class ProgressCard extends StatelessWidget {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: StatCard(
-        title: "Today's Progress",
-        value: '$percentage%',
-        subtitle: '$completed of $total habits completed',
-        icon: Icon(
-          PhosphorIcons.chartPie(),
-          color: colors.signal,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: colors.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: colors.line),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: colors.signal.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                PhosphorIcons.chartPie(),
+                color: colors.signal,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Today's Progress",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: colors.ink3,
+                    ),
+                  ),
+                  Text(
+                    '$percentage%',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: colors.ink,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  Text(
+                    '$completed of $total habits completed',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: colors.ink2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-

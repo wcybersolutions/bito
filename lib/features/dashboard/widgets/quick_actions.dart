@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bito/theme/theme_extensions.dart';
+import 'package:bito/domain/entities/entities.dart';
 
 class QuickActions extends StatefulWidget {
-  const QuickActions({super.key});
+  final List<DashboardHabitEntity> habits;
+
+  const QuickActions({
+    super.key,
+    required this.habits,
+  });
 
   @override
   State<QuickActions> createState() => _QuickActionsState();

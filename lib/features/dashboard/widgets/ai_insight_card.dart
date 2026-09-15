@@ -5,7 +5,12 @@ import 'package:bito/theme/theme_extensions.dart';
 import 'package:go_router/go_router.dart';
 
 class AIInsightCard extends StatefulWidget {
-  const AIInsightCard({super.key});
+  final String insight;
+
+  const AIInsightCard({
+    super.key,
+    required this.insight,
+  });
 
   @override
   State<AIInsightCard> createState() => _AIInsightCardState();

@@ -88,10 +88,10 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
   }
 
   Widget _buildHeader(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
@@ -129,10 +129,7 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
     );
   }
 
-  Widget _buildProgress(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildProgress(BuildContext context, BitoColorScheme colors) {
     final steps = ['DETAILS', 'STYLE', 'SETTINGS'];
     const activeStep = 2;
 
@@ -174,10 +171,10 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
   }
 
   Widget _buildCardHeader(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -185,17 +182,11 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
         children: [
           Text(
             'New Group',
-            style: textTheme.headlineSmall?.copyWith(
-              color: colors.ink,
-            ),
+            style: textTheme.headlineSmall?.copyWith(color: colors.ink),
           ),
           IconButton(
             onPressed: () => context.go('/groups'),
-            icon: Icon(
-              PhosphorIcons.x(),
-              size: 20,
-              color: colors.ink2,
-            ),
+            icon: Icon(PhosphorIcons.x(), size: 20, color: colors.ink2),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
           ),
@@ -204,10 +195,7 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
     );
   }
 
-  Widget _buildPrivateToggle(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildPrivateToggle(BuildContext context, BitoColorScheme colors) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -227,10 +215,7 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
               const SizedBox(height: 2),
               Text(
                 'Only invited members can join',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: colors.ink2,
-                ),
+                style: TextStyle(fontSize: 11, color: colors.ink2),
               ),
             ],
           ),
@@ -242,16 +227,13 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
               _privateGroup = val;
             });
           },
-          activeColor: colors.signal,
+          activeThumbColor: colors.signal,
         ),
       ],
     );
   }
 
-  Widget _buildIntensitySelector(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildIntensitySelector(BuildContext context, BitoColorScheme colors) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -279,10 +261,7 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
         const SizedBox(height: 4),
         Text(
           'Controls how much pressure this group applies. Changed by admins, applied to everyone.',
-          style: TextStyle(
-            fontSize: 12,
-            color: colors.ink2,
-          ),
+          style: TextStyle(fontSize: 12, color: colors.ink2),
         ),
         const SizedBox(height: 12),
         Row(
@@ -318,23 +297,20 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
         const SizedBox(height: 8),
         Text(
           _intensity.description,
-          style: TextStyle(
-            fontSize: 12,
-            color: colors.ink2,
-          ),
+          style: TextStyle(fontSize: 12, color: colors.ink2),
         ),
       ],
     );
   }
 
   Widget _buildIntensityButton(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-        required GroupIntensity intensity,
-        required bool isSelected,
-        required BitoColorScheme colors,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required GroupIntensity intensity,
+    required bool isSelected,
+    required BitoColorScheme colors,
+  }) {
     return Expanded(
       child: GestureDetector(
         onTap: () => _updateIntensity(intensity),
@@ -377,10 +353,7 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
     );
   }
 
-  Widget _buildSettingsList(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildSettingsList(BuildContext context, BitoColorScheme colors) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -424,11 +397,11 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
   }
 
   Widget _buildSettingItem(
-      BuildContext context, {
-        required String title,
-        required String value,
-        required BitoColorScheme colors,
-      }) {
+    BuildContext context, {
+    required String title,
+    required String value,
+    required BitoColorScheme colors,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -455,16 +428,11 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
     );
   }
 
-  Widget _buildBottomActions(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildBottomActions(BuildContext context, BitoColorScheme colors) {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: colors.line),
-        ),
+        border: Border(top: BorderSide(color: colors.line)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -472,11 +440,7 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
           ActionButton(
             text: 'BACK',
             type: ButtonType.outline,
-            icon: Icon(
-              PhosphorIcons.arrowLeft(),
-              size: 16,
-              color: colors.ink2,
-            ),
+            icon: Icon(PhosphorIcons.arrowLeft(), size: 16, color: colors.ink2),
             onPressed: () => context.go('/groups/create/step2'),
             expanded: false,
           ),
@@ -493,7 +457,9 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
                       final newGroup = Group(
                         id: DateTime.now().millisecondsSinceEpoch.toString(),
                         name: draft.name.isNotEmpty ? draft.name : 'New Group',
-                        description: draft.description.isNotEmpty ? draft.description : null,
+                        description: draft.description.isNotEmpty
+                            ? draft.description
+                            : null,
                         type: draft.type,
                         intensity: _intensity,
                         color: draft.color,
@@ -502,11 +468,14 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
                         missedDays: true,
                         nudges: true,
                         leaderboard: true,
-                        inviteCode: 'GRP${(DateTime.now().millisecondsSinceEpoch % 9000 + 1000)}',
+                        inviteCode:
+                            'GRP${(DateTime.now().millisecondsSinceEpoch % 9000 + 1000)}',
                         memberCount: 1,
                         createdAt: DateTime.now(),
                       );
-                      await ref.read(groupCreationProvider.notifier).createGroup(newGroup);
+                      await ref
+                          .read(groupCreationProvider.notifier)
+                          .createGroup(newGroup);
                       ref.read(groupDraftProvider.notifier).reset();
                       if (mounted) {
                         context.go('/groups/${newGroup.id}');
@@ -532,7 +501,10 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
                 ? const SizedBox(
                     width: 16,
                     height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.black,
+                    ),
                   )
                 : Row(
                     children: [
@@ -560,4 +532,3 @@ class _CreateGroupStep3State extends ConsumerState<CreateGroupStep3> {
     );
   }
 }
-

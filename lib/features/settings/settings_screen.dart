@@ -27,6 +27,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _aiVoice = 'Neutral';
   int _textSize = 0; // 0=Small, 1=Medium, 2=Large
 
+  String _designLanguage = 'Legacy';
+  String _colorWorld = 'Legacy';
+  String _palette = 'Indigo';
+  String _signal = 'Complement';
+  String _theme = 'Dark';
+
   // ── Helpers ────────────────────────────────────────────────────────────────
   final List<String> _textSizeLabels = ['Small\nDefault', 'Medium\nComfortable', 'Large\nSpacious'];
 
@@ -48,6 +54,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   // Section tabs hint
                   _buildSectionTabs(colors),
+                  const SizedBox(height: 24),
+
+                  // PROFILE
+                  _SectionLabel(label: 'PROFILE', colors: colors),
+                  const SizedBox(height: 10),
+                  _buildProfileCard(colors),
+                  const SizedBox(height: 24),
+
+                  // APPEARANCE
+                  _SectionLabel(label: 'APPEARANCE', colors: colors),
+                  const SizedBox(height: 10),
+                  _buildAppearanceCard(colors),
                   const SizedBox(height: 24),
 
                   // TEXT SIZE
@@ -222,6 +240,145 @@ class _SettingsScreenState extends State<SettingsScreen> {
         color: colors.ink2,
         letterSpacing: 0.8,
         fontFamily: 'SpaceMono',
+      ),
+    );
+  }
+
+  // ── Profile ───────────────────────────────────────────────────────────────
+  Widget _buildProfileCard(BitoColorScheme colors) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF161618), // Dark card from screenshot
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colors.signal2),
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: colors.signal2,
+                child: Text(
+                  'JK',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: colors.signalInk,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Joseph Katsande',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: colors.ink,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '@jabari · katsandejoseph39@gmail.com',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: colors.ink2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: colors.ink,
+                    side: BorderSide(color: colors.signal2),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text('Change avatar', style: TextStyle(fontWeight: FontWeight.w600)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: colors.signal2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(PhosphorIcons.googleLogo(), size: 20, color: colors.ink),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Appearance ────────────────────────────────────────────────────────────
+  Widget _buildAppearanceCard(BitoColorScheme colors) {
+    return _SettingsCard(
+      colors: colors,
+      child: Column(
+        children: [
+          _DropdownRow(
+            label: 'DESIGN LANGUAGE',
+            subtitle: 'Legacy',
+            value: _designLanguage,
+            options: const ['Legacy', 'Standard'],
+            onChanged: (v) => setState(() => _designLanguage = v!),
+            colors: colors,
+          ),
+          _DividerFull(colors: colors),
+          _DropdownRow(
+            label: 'COLOR WORLD',
+            subtitle: 'Your whole environment shifts...',
+            value: _colorWorld,
+            options: const ['Legacy', 'Modern'],
+            onChanged: (v) => setState(() => _colorWorld = v!),
+            colors: colors,
+          ),
+          _DividerFull(colors: colors),
+          _DropdownRow(
+            label: 'PALETTE',
+            subtitle: 'Indigo',
+            value: _palette,
+            options: const ['Indigo', 'Mineral', 'Forest', 'Ember', 'Ocean', 'Rose', 'Hue'],
+            onChanged: (v) => setState(() => _palette = v!),
+            colors: colors,
+          ),
+          _DividerFull(colors: colors),
+          _DropdownRow(
+            label: 'SIGNAL',
+            subtitle: 'Complement',
+            value: _signal,
+            options: const ['Complement', 'Native'],
+            onChanged: (v) => setState(() => _signal = v!),
+            colors: colors,
+          ),
+          _DividerFull(colors: colors),
+          _DropdownRow(
+            label: 'THEME',
+            subtitle: 'Dark',
+            value: _theme,
+            options: const ['Light', 'Dark', 'System'],
+            onChanged: (v) => setState(() => _theme = v!),
+            colors: colors,
+          ),
+        ],
       ),
     );
   }
@@ -542,8 +699,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           _DividerFull(colors: colors),
           _NavRow(
-            icon: PhosphorIcons.chartBar(),
-            label: 'Replay analytics tour',
+            icon: PhosphorIcons.repeat(),
+            label: 'Replay habits tour',
             subtitle: '',
             colors: colors,
             onTap: () {},
@@ -861,7 +1018,7 @@ class _ToggleRow extends StatelessWidget {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: colors.signal2,
+            activeThumbColor: colors.signal2,
             activeTrackColor: colors.signal2.withValues(alpha: 0.4),
             inactiveThumbColor: colors.ink3,
             inactiveTrackColor: colors.line2,

@@ -70,6 +70,7 @@ class AuthUser extends User {
     required this.refreshToken,
   });
 
+  @override
   AuthUser copyWith({
     String? id,
     String? email,
@@ -95,9 +96,5 @@ class AuthUser extends User {
   }
 
   @override
-  List<Object?> get props => [
-    ...super.props,
-    accessToken,
-    refreshToken,
-  ];
+  List<Object?> get props => [...super.props, accessToken, refreshToken];
 }

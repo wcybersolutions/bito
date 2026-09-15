@@ -21,11 +21,7 @@ class WeekCard extends StatefulWidget {
   final List<WeekDay> weekData;
   final String dateRange;
 
-  const WeekCard({
-    super.key,
-    required this.weekData,
-    required this.dateRange,
-  });
+  const WeekCard({super.key, required this.weekData, required this.dateRange});
 
   @override
   State<WeekCard> createState() => _WeekCardState();
@@ -108,9 +104,9 @@ class _WeekCardState extends State<WeekCard> {
       final endMonth = _monthAbbr(endOfWeek.month);
 
       if (startMonth == endMonth) {
-        return '${startMonth} ${targetWeek.day}–${endOfWeek.day}';
+        return '$startMonth ${targetWeek.day}–${endOfWeek.day}';
       }
-      return '${startMonth} ${targetWeek.day}–${endMonth} ${endOfWeek.day}';
+      return '$startMonth ${targetWeek.day}–$endMonth ${endOfWeek.day}';
     } else if (_selectedRange == 1) {
       return '${_monthName(_currentMonth)} $_currentYear';
     } else {
@@ -119,14 +115,38 @@ class _WeekCardState extends State<WeekCard> {
   }
 
   String _monthAbbr(int month) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return months[month - 1];
   }
 
   String _monthName(int month) {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'];
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
     return months[month - 1];
   }
 
@@ -184,7 +204,9 @@ class _WeekCardState extends State<WeekCard> {
                           height: 18,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
-                            color: isSelected ? colors.signal2 : Colors.transparent,
+                            color: isSelected
+                                ? colors.signal2
+                                : Colors.transparent,
                           ),
                           child: Center(
                             child: Text(
@@ -192,7 +214,9 @@ class _WeekCardState extends State<WeekCard> {
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
-                                color: isSelected ? colors.signalInk : colors.ink3,
+                                color: isSelected
+                                    ? colors.signalInk
+                                    : colors.ink3,
                                 letterSpacing: 0.5,
                               ),
                             ),
@@ -244,7 +268,10 @@ class _WeekCardState extends State<WeekCard> {
                       onPressed: _goToToday,
                       style: TextButton.styleFrom(
                         backgroundColor: colors.signal2,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         shape: RoundedRectangleBorder(
@@ -340,7 +367,8 @@ class _WeekCardState extends State<WeekCard> {
     final daysInMonth = DateTime(_currentYear, _currentMonth + 1, 0).day;
     final firstDayOfMonth = DateTime(_currentYear, _currentMonth, 1).weekday;
     final today = DateTime.now();
-    final isCurrentMonth = _currentMonth == today.month && _currentYear == today.year;
+    final isCurrentMonth =
+        _currentMonth == today.month && _currentYear == today.year;
 
     // Generate week day headers
     const weekDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -374,9 +402,8 @@ class _WeekCardState extends State<WeekCard> {
           children: List.generate(42, (index) {
             final dayNumber = index - firstDayOfMonth + 1;
             final isInMonth = dayNumber > 0 && dayNumber <= daysInMonth;
-            final isToday = isInMonth &&
-                isCurrentMonth &&
-                dayNumber == today.day;
+            final isToday =
+                isInMonth && isCurrentMonth && dayNumber == today.day;
 
             return Container(
               width: 30,
@@ -428,8 +455,20 @@ class _WeekCardState extends State<WeekCard> {
   }
 
   Widget _buildYearView(BitoColorScheme colors) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
     // Group months in rows of 3
     List<List<int>> monthRows = [];
@@ -444,7 +483,8 @@ class _WeekCardState extends State<WeekCard> {
           child: Row(
             children: row.map((monthIndex) {
               final month = monthIndex + 1;
-              final isCurrentMonth = month == DateTime.now().month &&
+              final isCurrentMonth =
+                  month == DateTime.now().month &&
                   _viewYear == DateTime.now().year;
               final progress = _getMonthProgress(month);
 
@@ -484,7 +524,9 @@ class _WeekCardState extends State<WeekCard> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(3),
-                              color: isCurrentMonth ? colors.signal2 : colors.signal2,
+                              color: isCurrentMonth
+                                  ? colors.signal2
+                                  : colors.signal2,
                             ),
                           ),
                         ),
@@ -522,4 +564,3 @@ class _WeekCardState extends State<WeekCard> {
     return 73.5;
   }
 }
-

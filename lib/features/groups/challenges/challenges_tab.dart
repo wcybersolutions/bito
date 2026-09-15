@@ -11,10 +11,7 @@ import 'package:bito/features/groups/challenges/create_challenge_sheet.dart';
 class ChallengesTab extends ConsumerWidget {
   final Group group;
 
-  const ChallengesTab({
-    super.key,
-    required this.group,
-  });
+  const ChallengesTab({super.key, required this.group});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,11 +36,7 @@ class ChallengesTab extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  PhosphorIcons.trophy(),
-                  size: 15,
-                  color: colors.ink,
-                ),
+                Icon(PhosphorIcons.trophy(), size: 15, color: colors.ink),
                 const SizedBox(width: 8),
                 Text(
                   'STANDINGS',
@@ -109,11 +102,7 @@ class ChallengesTab extends ConsumerWidget {
           RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
-              style: TextStyle(
-                fontSize: 13,
-                color: colors.ink2,
-                height: 1.5,
-              ),
+              style: TextStyle(fontSize: 13, color: colors.ink2, height: 1.5),
               children: [
                 const TextSpan(text: 'Create a streak, '),
                 TextSpan(
@@ -136,11 +125,7 @@ class ChallengesTab extends ConsumerWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () => CreateChallengeSheet.show(context, group.id),
-              icon: Icon(
-                PhosphorIcons.trophy(),
-                size: 16,
-                color: Colors.black,
-              ),
+              icon: Icon(PhosphorIcons.trophy(), size: 16, color: Colors.black),
               label: const Text(
                 'CREATE CHALLENGE',
                 style: TextStyle(
@@ -192,11 +177,7 @@ class ChallengesTab extends ConsumerWidget {
             ),
             OutlinedButton.icon(
               onPressed: () => CreateChallengeSheet.show(context, group.id),
-              icon: Icon(
-                PhosphorIcons.plus(),
-                size: 13,
-                color: colors.ink,
-              ),
+              icon: Icon(PhosphorIcons.plus(), size: 13, color: colors.ink),
               label: Text(
                 'NEW CHALLENGE',
                 style: TextStyle(
@@ -208,8 +189,10 @@ class ChallengesTab extends ConsumerWidget {
                 ),
               ),
               style: OutlinedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
                 side: BorderSide(color: colors.line),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6),
@@ -223,7 +206,7 @@ class ChallengesTab extends ConsumerWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: challenges.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          separatorBuilder: (_, _) => const SizedBox(height: 12),
           itemBuilder: (context, index) {
             final c = challenges[index];
             return _buildChallengeCard(context, ref, colors, c);
@@ -305,17 +288,17 @@ class ChallengesTab extends ConsumerWidget {
                       .toggleJoin(group.id, challenge.id);
                 },
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
                   decoration: BoxDecoration(
                     color: challenge.isJoined
                         ? colors.surface2
                         : colors.signal2,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: challenge.isJoined
-                          ? colors.line
-                          : colors.signal2,
+                      color: challenge.isJoined ? colors.line : colors.signal2,
                     ),
                   ),
                   child: Text(
@@ -346,8 +329,9 @@ class ChallengesTab extends ConsumerWidget {
             child: LinearProgressIndicator(
               value: progressRatio,
               backgroundColor: colors.line,
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(Color(0xFFFF6D4A)),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                Color(0xFFFF6D4A),
+              ),
               minHeight: 5,
             ),
           ),

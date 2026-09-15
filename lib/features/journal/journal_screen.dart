@@ -22,8 +22,29 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
     final textTheme = Theme.of(context).textTheme;
     final now = DateTime.now();
-    final dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.weekday % 7];
-    final month = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][now.month - 1];
+    final dayName = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ][now.weekday % 7];
+    final month = [
+      'JAN',
+      'FEB',
+      'MAR',
+      'APR',
+      'MAY',
+      'JUN',
+      'JUL',
+      'AUG',
+      'SEP',
+      'OCT',
+      'NOV',
+      'DEC',
+    ][now.month - 1];
 
     final entriesAsync = ref.watch(journalEntriesProvider);
 
@@ -50,9 +71,7 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
                 children: [
                   Text(
                     'Journal',
-                    style: textTheme.displayMedium?.copyWith(
-                      color: colors.ink,
-                    ),
+                    style: textTheme.displayMedium?.copyWith(color: colors.ink),
                   ),
                   TextButton(
                     onPressed: () {
@@ -60,7 +79,10 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: colors.signal2,
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       shape: RoundedRectangleBorder(
@@ -107,22 +129,19 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
           context.go('/journal/new');
         },
         backgroundColor: colors.signal2,
-        child: Icon(
-          PhosphorIcons.plus(),
-          color: Colors.black,
-        ),
+        child: Icon(PhosphorIcons.plus(), color: Colors.black),
       ),
     );
   }
 
   Widget _buildTodayDesk(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      String dayName,
-      String month,
-      DateTime now,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    String dayName,
+    String month,
+    DateTime now,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -149,9 +168,7 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
             children: [
               Text(
                 dayName,
-                style: textTheme.headlineSmall?.copyWith(
-                  color: colors.ink,
-                ),
+                style: textTheme.headlineSmall?.copyWith(color: colors.ink),
               ),
               Text(
                 month,
@@ -183,11 +200,7 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
             ),
             child: Row(
               children: [
-                Icon(
-                  PhosphorIcons.pencil(),
-                  size: 16,
-                  color: colors.ink3,
-                ),
+                Icon(PhosphorIcons.pencil(), size: 16, color: colors.ink3),
                 const SizedBox(width: 8),
                 Text(
                   'No entry yet today',
@@ -203,7 +216,10 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
                     context.go('/journal/new');
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: colors.signal2,
                       borderRadius: BorderRadius.circular(4),
@@ -229,11 +245,11 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
   }
 
   Widget _buildReadingRoom(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      AsyncValue<List<JournalEntry>> entriesAsync,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    AsyncValue<List<JournalEntry>> entriesAsync,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -250,10 +266,7 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
         const SizedBox(height: 4),
         Text(
           'Browse past entries, search, or reflect',
-          style: TextStyle(
-            fontSize: 12,
-            color: colors.ink2,
-          ),
+          style: TextStyle(fontSize: 12, color: colors.ink2),
         ),
         const SizedBox(height: 12),
         Text(
@@ -277,9 +290,7 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
                   child: Text(
                     'No journal entries yet.\nStart writing today!',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: colors.ink3,
-                    ),
+                    style: TextStyle(color: colors.ink3),
                   ),
                 ),
               );
@@ -303,14 +314,12 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
               ),
             ),
           ),
-          error: (_, __) => Center(
+          error: (_, _) => Center(
             child: Padding(
               padding: const EdgeInsets.all(32),
               child: Text(
                 'Error loading entries',
-                style: TextStyle(
-                  color: colors.error,
-                ),
+                style: TextStyle(color: colors.error),
               ),
             ),
           ),
@@ -351,7 +360,7 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
                     ),
                   ),
                   loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
                 ),
                 const SizedBox(width: 8),
                 TextButton(
@@ -380,4 +389,3 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
     );
   }
 }
-

@@ -178,32 +178,30 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircleAvatar(
-                radius: 14,
-                backgroundColor: colors.surface2,
-                child: Icon(PhosphorIcons.user(), size: 14, color: colors.ink),
-              ),
-              const SizedBox(width: 8),
-              IconButton(
-                onPressed: () => InvitesAndSharingSheet.show(context, group),
-                icon: Icon(
-                  PhosphorIcons.qrCode(),
-                  size: 20,
-                  color: colors.ink2,
+              GestureDetector(
+                onTap: () => InvitesAndSharingSheet.show(context, group),
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  child: Icon(
+                    PhosphorIcons.qrCode(),
+                    size: 20,
+                    color: colors.ink2,
+                  ),
                 ),
-                padding: const EdgeInsets.all(4),
-                constraints: const BoxConstraints(),
               ),
               const SizedBox(width: 4),
-              IconButton(
-                onPressed: () => _showGroupOptions(context, colors, group),
-                icon: Icon(
-                  PhosphorIcons.gear(),
-                  size: 20,
-                  color: colors.ink2,
+              GestureDetector(
+                onTap: () => _showGroupOptions(context, colors, group),
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  child: Icon(
+                    PhosphorIcons.gear(),
+                    size: 20,
+                    color: colors.ink2,
+                  ),
                 ),
-                padding: const EdgeInsets.all(4),
-                constraints: const BoxConstraints(),
               ),
             ],
           ),
@@ -311,22 +309,23 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
         ),
         child: TabBar(
           controller: _tabController,
+          isScrollable: false,
           indicatorColor: colors.signal2,
           indicatorWeight: 2,
-          indicatorSize: TabBarIndicatorSize.label,
+          indicatorSize: TabBarIndicatorSize.tab,
           labelColor: colors.signal2,
           unselectedLabelColor: colors.ink3,
-          labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+          labelPadding: const EdgeInsets.symmetric(horizontal: 2),
           labelStyle: const TextStyle(
-            fontSize: 10,
+            fontSize: 9.5,
             fontWeight: FontWeight.w800,
-            letterSpacing: 0.5,
+            letterSpacing: 0.2,
             fontFamily: 'SpaceMono',
           ),
           unselectedLabelStyle: const TextStyle(
-            fontSize: 10,
+            fontSize: 9.5,
             fontWeight: FontWeight.w700,
-            letterSpacing: 0.5,
+            letterSpacing: 0.2,
             fontFamily: 'SpaceMono',
           ),
           dividerColor: Colors.transparent,
@@ -392,3 +391,5 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
     );
   }
 }
+
+

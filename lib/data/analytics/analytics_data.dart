@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 // Daily performance data model
 class DailyPerformance {
   final String date;
@@ -23,11 +21,7 @@ class DailyPerformance {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'date': date,
-      'completed': completed,
-      'total': total,
-    };
+    return {'date': date, 'completed': completed, 'total': total};
   }
 }
 
@@ -110,10 +104,7 @@ class AISignal {
   final String briefing;
   final List<String> questions;
 
-  AISignal({
-    required this.briefing,
-    required this.questions,
-  });
+  AISignal({required this.briefing, required this.questions});
 
   factory AISignal.fromJson(Map<String, dynamic> json) {
     return AISignal(
@@ -123,10 +114,7 @@ class AISignal {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'briefing': briefing,
-      'questions': questions,
-    };
+    return {'briefing': briefing, 'questions': questions};
   }
 }
 
@@ -151,11 +139,7 @@ class AnalyticsPattern {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'description': description,
-      'isStable': isStable,
-    };
+    return {'title': title, 'description': description, 'isStable': isStable};
   }
 }
 
@@ -180,11 +164,7 @@ class AnalyticsTrend {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'description': description,
-      'badge': badge,
-    };
+    return {'title': title, 'description': description, 'badge': badge};
   }
 }
 
@@ -193,10 +173,7 @@ class AnalyticsCorrelation {
   final String title;
   final String description;
 
-  AnalyticsCorrelation({
-    required this.title,
-    required this.description,
-  });
+  AnalyticsCorrelation({required this.title, required this.description});
 
   factory AnalyticsCorrelation.fromJson(Map<String, dynamic> json) {
     return AnalyticsCorrelation(
@@ -206,10 +183,7 @@ class AnalyticsCorrelation {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'description': description,
-    };
+    return {'title': title, 'description': description};
   }
 }
 
@@ -234,11 +208,7 @@ class AnalyticsRecommendation {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'description': description,
-      'priority': priority,
-    };
+    return {'title': title, 'description': description, 'priority': priority};
   }
 }
 
@@ -302,4 +272,3 @@ class AnalyticsData {
     };
   }
 }
-

@@ -10,10 +10,7 @@ import 'package:bito/shared/components/inputs/digital_time_picker.dart';
 class AddGroupHabitSheet extends ConsumerStatefulWidget {
   final String groupId;
 
-  const AddGroupHabitSheet({
-    super.key,
-    required this.groupId,
-  });
+  const AddGroupHabitSheet({super.key, required this.groupId});
 
   static Future<void> show(BuildContext context, String groupId) {
     return showModalBottomSheet(
@@ -35,7 +32,9 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   String _selectedCategory = 'Health & Fitness';
-  final TextEditingController _targetController = TextEditingController(text: '1');
+  final TextEditingController _targetController = TextEditingController(
+    text: '1',
+  );
   String _selectedTargetUnit = 'Times';
 
   // Form State - Style
@@ -58,13 +57,7 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
     'Study',
   ];
 
-  final List<String> _targetUnits = [
-    'Times',
-    'km',
-    'mins',
-    'hours',
-    'pages',
-  ];
+  final List<String> _targetUnits = ['Times', 'km', 'mins', 'hours', 'pages'];
 
   final List<String> _iconCategories = [
     'ALL',
@@ -76,13 +69,21 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
 
   final List<Map<String, dynamic>> _iconList = [
     {'name': 'barbell', 'icon': PhosphorIcons.barbell(), 'cat': 'FITNESS'},
-    {'name': 'sneakerMove', 'icon': PhosphorIcons.sneakerMove(), 'cat': 'FITNESS'},
+    {
+      'name': 'sneakerMove',
+      'icon': PhosphorIcons.sneakerMove(),
+      'cat': 'FITNESS',
+    },
     {'name': 'heart', 'icon': PhosphorIcons.heart(), 'cat': 'HEALTH'},
     {'name': 'drop', 'icon': PhosphorIcons.drop(), 'cat': 'HEALTH'},
     {'name': 'bookOpen', 'icon': PhosphorIcons.bookOpen(), 'cat': 'MIND'},
     {'name': 'brain', 'icon': PhosphorIcons.brain(), 'cat': 'MIND'},
     {'name': 'sparkle', 'icon': PhosphorIcons.sparkle(), 'cat': 'PRODUCTIVITY'},
-    {'name': 'checkCircle', 'icon': PhosphorIcons.checkCircle(), 'cat': 'PRODUCTIVITY'},
+    {
+      'name': 'checkCircle',
+      'icon': PhosphorIcons.checkCircle(),
+      'cat': 'PRODUCTIVITY',
+    },
     {'name': 'fire', 'icon': PhosphorIcons.fire(), 'cat': 'ALL'},
     {'name': 'sun', 'icon': PhosphorIcons.sun(), 'cat': 'ALL'},
     {'name': 'moon', 'icon': PhosphorIcons.moon(), 'cat': 'ALL'},
@@ -229,11 +230,7 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: Icon(
-                    PhosphorIcons.x(),
-                    color: colors.ink3,
-                    size: 20,
-                  ),
+                  icon: Icon(PhosphorIcons.x(), color: colors.ink3, size: 20),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
@@ -287,10 +284,14 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: isActive ? colors.signal.withValues(alpha: 0.12) : colors.surface2,
+            color: isActive
+                ? colors.signal.withValues(alpha: 0.12)
+                : colors.surface2,
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-              color: isActive ? colors.signal : (isDone ? colors.line2 : colors.line),
+              color: isActive
+                  ? colors.signal
+                  : (isDone ? colors.line2 : colors.line),
             ),
           ),
           child: Center(
@@ -299,7 +300,9 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
               style: TextStyle(
                 fontSize: 9,
                 fontWeight: FontWeight.w700,
-                color: isActive ? colors.signal : (isDone ? colors.ink2 : colors.ink3),
+                color: isActive
+                    ? colors.signal
+                    : (isDone ? colors.ink2 : colors.ink3),
                 letterSpacing: 0.6,
                 fontFamily: 'SpaceMono',
               ),
@@ -342,7 +345,10 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
               hintText: 'e.g. Morning run, Daily reading',
               hintStyle: TextStyle(color: colors.ink3, fontSize: 14),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
             ),
           ),
         ),
@@ -364,7 +370,10 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
               hintText: 'Run at least 2km every morning with the group',
               hintStyle: TextStyle(color: colors.ink3, fontSize: 14),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
             ),
           ),
         ),
@@ -384,7 +393,11 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
               value: _selectedCategory,
               isExpanded: true,
               dropdownColor: colors.surface,
-              icon: Icon(PhosphorIcons.caretDown(), color: colors.ink3, size: 16),
+              icon: Icon(
+                PhosphorIcons.caretDown(),
+                color: colors.ink3,
+                size: 16,
+              ),
               items: _categories.map((cat) {
                 return DropdownMenuItem<String>(
                   value: cat,
@@ -426,7 +439,10 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
                     hintText: '1',
                     hintStyle: TextStyle(color: colors.ink3, fontSize: 14),
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
                   ),
                 ),
               ),
@@ -446,7 +462,11 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
                     value: _selectedTargetUnit,
                     isExpanded: true,
                     dropdownColor: colors.surface,
-                    icon: Icon(PhosphorIcons.caretDown(), color: colors.ink3, size: 16),
+                    icon: Icon(
+                      PhosphorIcons.caretDown(),
+                      color: colors.ink3,
+                      size: 16,
+                    ),
                     items: _targetUnits.map((unit) {
                       return DropdownMenuItem<String>(
                         value: unit,
@@ -476,7 +496,13 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
   Widget _buildStyleStep(BitoColorScheme colors, TextTheme textTheme) {
     final filteredIcons = _selectedIconCategory == 'ALL'
         ? _iconList
-        : _iconList.where((item) => item['cat'] == _selectedIconCategory || item['cat'] == 'ALL').toList();
+        : _iconList
+              .where(
+                (item) =>
+                    item['cat'] == _selectedIconCategory ||
+                    item['cat'] == 'ALL',
+              )
+              .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -496,7 +522,10 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
                 },
                 child: Container(
                   margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: isSelected ? colors.signal : colors.bg,
                     borderRadius: BorderRadius.circular(6),
@@ -546,7 +575,9 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: isSelected ? Color(_selectedColor).withValues(alpha: 0.2) : colors.bg,
+                  color: isSelected
+                      ? Color(_selectedColor).withValues(alpha: 0.2)
+                      : colors.bg,
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: isSelected ? Color(_selectedColor) : colors.line,
@@ -603,11 +634,7 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
                       : null,
                 ),
                 child: isSelected
-                    ? const Icon(
-                        Icons.check,
-                        size: 16,
-                        color: Colors.white,
-                      )
+                    ? const Icon(Icons.check, size: 16, color: Colors.white)
                     : null,
               ),
             );
@@ -692,17 +719,14 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
                     const SizedBox(height: 2),
                     Text(
                       'All group members must adopt this habit',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: colors.ink3,
-                      ),
+                      style: TextStyle(fontSize: 11, color: colors.ink3),
                     ),
                   ],
                 ),
               ),
               Switch(
                 value: _requireForAll,
-                activeColor: Color(_selectedColor),
+                activeThumbColor: Color(_selectedColor),
                 onChanged: (val) {
                   setState(() {
                     _requireForAll = val;
@@ -737,7 +761,7 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
                   ),
                   Switch(
                     value: _enableReminders,
-                    activeColor: Color(_selectedColor),
+                    activeThumbColor: Color(_selectedColor),
                     onChanged: (val) {
                       setState(() {
                         _enableReminders = val;
@@ -776,7 +800,10 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
                         }
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: colors.surface2,
                           borderRadius: BorderRadius.circular(6),
@@ -784,7 +811,11 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
                         ),
                         child: Row(
                           children: [
-                            Icon(PhosphorIcons.clock(), size: 14, color: colors.ink),
+                            Icon(
+                              PhosphorIcons.clock(),
+                              size: 14,
+                              color: colors.ink,
+                            ),
                             const SizedBox(width: 6),
                             Text(
                               _reminderTime.format(context),
@@ -835,9 +866,14 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
             OutlinedButton(
               onPressed: () => Navigator.pop(context),
               style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 side: BorderSide(color: colors.line),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
               child: Text(
                 'CANCEL',
@@ -857,9 +893,14 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
                 });
               },
               style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 side: BorderSide(color: colors.line),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
               child: Text(
                 'BACK',
@@ -891,7 +932,9 @@ class _AddGroupHabitSheetState extends ConsumerState<AddGroupHabitSheet> {
               backgroundColor: Color(_selectedColor),
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
               elevation: 0,
             ),
             child: Text(

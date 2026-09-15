@@ -1,12 +1,11 @@
 // lib/features/auth/sign_in_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bito/theme/theme_extensions.dart';
 import 'package:bito/theme/colors.dart';
 import 'package:bito/shared/components/app_bar/bito_logo.dart';
-import '../../data/providers/auth_provider.dart';  // Add this
+import '../../data/providers/auth_provider.dart'; // Add this
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
@@ -48,7 +47,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _emailSent = true;  // Show "Check your email" screen
+          _emailSent = true; // Show "Check your email" screen
         });
       }
     } catch (e) {
@@ -136,10 +135,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         child: TextFormField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: colors.ink,
-                          ),
+                          style: TextStyle(fontSize: 16, color: colors.ink),
                           decoration: InputDecoration(
                             hintText: 'you@example.com',
                             hintStyle: TextStyle(
@@ -171,33 +167,30 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         ),
                         child: _isLoading
                             ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
                             : const Text(
-                          'CONTINUE',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                            letterSpacing: 0.8,
-                            fontFamily: 'SpaceMono',
-                          ),
-                        ),
+                                'CONTINUE',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                  letterSpacing: 0.8,
+                                  fontFamily: 'SpaceMono',
+                                ),
+                              ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     Row(
                       children: [
                         Expanded(
-                          child: Container(
-                            height: 1,
-                            color: colors.line,
-                          ),
+                          child: Container(height: 1, color: colors.line),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -213,10 +206,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           ),
                         ),
                         Expanded(
-                          child: Container(
-                            height: 1,
-                            color: colors.line,
-                          ),
+                          child: Container(height: 1, color: colors.line),
                         ),
                       ],
                     ),
@@ -229,7 +219,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           onPressed: _handleGoogleSignIn,
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
-                            side: const BorderSide(color: Color(0xFF57534A), width: 1.0),
+                            side: const BorderSide(
+                              color: Color(0xFF57534A),
+                              width: 1.0,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(11),
                             ),
@@ -297,11 +290,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.email_outlined,
-                size: 80,
-                color: colors.signal,
-              ),
+              Icon(Icons.email_outlined, size: 80, color: colors.signal),
               const SizedBox(height: 24),
               Text(
                 'Check your email',
@@ -315,19 +304,13 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               Text(
                 'We\'ve sent a magic link to\n${_emailController.text}',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: colors.ink2,
-                ),
+                style: TextStyle(fontSize: 16, color: colors.ink2),
               ),
               const SizedBox(height: 8),
               Text(
                 'Tap the link to sign in automatically',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: colors.ink3,
-                ),
+                style: TextStyle(fontSize: 14, color: colors.ink3),
               ),
               const SizedBox(height: 32),
               SizedBox(
@@ -346,10 +329,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   ),
                   child: const Text(
                     'Back to Sign In',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -365,4 +345,3 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     context.go('/daily-wisdom');
   }
 }
-

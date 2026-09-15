@@ -1,7 +1,6 @@
 // lib/data/providers/auth_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/providers/core_providers.dart';
-import '../../core/storage/secure_storage.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/i_auth_repository.dart';
 import '../../domain/usecases/auth/send_magic_link_usecase.dart';
@@ -85,7 +84,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<AuthUser?>> {
   final IAuthRepository _repository;
   final Ref _ref;
 
-  AuthNotifier(this._repository, this._ref) : super(const AsyncValue.loading()) {
+  AuthNotifier(this._repository, this._ref)
+    : super(const AsyncValue.loading()) {
     _loadUser();
   }
 
@@ -144,8 +144,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<AuthUser?>> {
   bool get isAuthenticated => state.hasValue && state.value != null;
 }
 
-final authNotifierProvider = StateNotifierProvider<AuthNotifier, AsyncValue<AuthUser?>>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return AuthNotifier(repository, ref);
-});
-
+final authNotifierProvider =
+    StateNotifierProvider<AuthNotifier, AsyncValue<AuthUser?>>((ref) {
+      final repository = ref.watch(authRepositoryProvider);
+      return AuthNotifier(repository, ref);
+    });

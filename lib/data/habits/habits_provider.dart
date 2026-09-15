@@ -1,10 +1,8 @@
 // lib/data/habits/habits_provider.dart
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'habit.dart';
 import 'habits_repository.dart';
-
 
 // Provider for the repository
 final habitsRepositoryProvider = Provider<HabitsRepository>((ref) {
@@ -30,7 +28,9 @@ final weeklyHabitsProvider = FutureProvider<List<Habit>>((ref) async {
 });
 
 // Provider for habits by time block
-final habitsByBlockProvider = FutureProvider<Map<HabitTimeBlock, List<Habit>>>((ref) async {
+final habitsByBlockProvider = FutureProvider<Map<HabitTimeBlock, List<Habit>>>((
+  ref,
+) async {
   final repository = ref.read(habitsRepositoryProvider);
   return repository.getHabitsByBlock();
 });
@@ -59,10 +59,11 @@ class HabitCompletionNotifier extends StateNotifier<Map<String, bool>> {
 }
 
 // Provider for habit completion state
-final habitCompletionProvider = StateNotifierProvider<HabitCompletionNotifier, Map<String, bool>>((ref) {
-  final repository = ref.read(habitsRepositoryProvider);
-  return HabitCompletionNotifier(repository);
-});
+final habitCompletionProvider =
+    StateNotifierProvider<HabitCompletionNotifier, Map<String, bool>>((ref) {
+      final repository = ref.read(habitsRepositoryProvider);
+      return HabitCompletionNotifier(repository);
+    });
 
 // Provider for habit statistics
 final habitStatsProvider = FutureProvider<HabitStats>((ref) async {
@@ -86,4 +87,3 @@ class HabitStats {
     required this.completionRate,
   });
 }
-

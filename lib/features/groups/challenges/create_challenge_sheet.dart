@@ -30,13 +30,11 @@ class CreateChallengeSheet extends ConsumerStatefulWidget {
 }
 
 class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
-  int _currentStep = 0; // 0: TYPE, 1: BASICS, 2: TARGETS, 3: SETTINGS, 4: YOUR HABIT
-  final List<String> _steps = ['TYPE', 'BASICS', 'TARGETS', 'SETTINGS', 'YOUR HABIT'];
+  int _currentStep = 0; // 0: DETAILS, 1: TARGET & HABIT, 2: SETTINGS
+  final List<String> _steps = ['DETAILS', 'TARGET & HABIT', 'SETTINGS'];
 
-  // Step 1: Type
+  // Step 1: Details (Type & Basics)
   ChallengeType _selectedType = ChallengeType.streak;
-
-  // Step 2: Basics
   final TextEditingController _titleController =
       TextEditingController(text: '14-Day Morning Streak');
   final TextEditingController _descriptionController = TextEditingController(
@@ -44,7 +42,7 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
   String _selectedDuration = '14 Days';
   final List<String> _durations = ['7 Days', '14 Days', '21 Days', '30 Days'];
 
-  // Step 3: Targets
+  // Step 2: Target & Habit
   final TextEditingController _targetController =
       TextEditingController(text: '7');
   String _selectedUnit = 'Days';
@@ -64,13 +62,11 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
     'Multiple — combine all qualifying habits'
   ];
 
-  // Step 4: Settings
+  // Step 3: Settings & Personal Habit
   bool _allowLateJoin = true;
   bool _showLeaderboard = true;
   final TextEditingController _maxParticipantsController =
       TextEditingController();
-
-  // Step 5: Your Habit
   String _personalHabit = 'Morning run';
 
   @override
@@ -362,24 +358,20 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
   Widget _buildCurrentStep(BitoColorScheme colors, TextTheme textTheme) {
     switch (_currentStep) {
       case 0:
-        return _buildStep1Type(colors);
+        return _buildStep1Details(colors);
       case 1:
-        return _buildStep2Basics(colors);
+        return _buildStep2TargetAndHabit(colors);
       case 2:
-        return _buildStep3Targets(colors);
-      case 3:
-        return _buildStep4Settings(colors);
-      case 4:
-        return _buildStep5YourHabit(colors);
+        return _buildStep3Settings(colors);
       default:
         return const SizedBox.shrink();
     }
   }
 
   // -------------------------------------------------------------
-  // STEP 1: TYPE
+  // STEP 1: DETAILS (Merged Type & Basics)
   // -------------------------------------------------------------
-  Widget _buildStep1Type(BitoColorScheme colors) {
+  Widget _buildStep1Details(BitoColorScheme colors) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -388,7 +380,7 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
             Icon(PhosphorIcons.sparkle(), size: 12, color: colors.signal2),
             const SizedBox(width: 6),
             Text(
-              'AI SUGGESTIONS HIGHLIGHTED BELOW',
+              'SELECT CHALLENGE TYPE',
               style: TextStyle(
                 fontSize: 9,
                 fontWeight: FontWeight.w700,
@@ -399,7 +391,7 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
             ),
           ],
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
 
         // 2x2 Grid of Challenge Types
         Row(
@@ -447,107 +439,9 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
             ),
           ],
         ),
-      ],
-    );
-  }
+        const SizedBox(height: 20),
 
-  Widget _buildTypeCard(
-    BitoColorScheme colors, {
-    required ChallengeType type,
-    required IconData icon,
-    required bool hasAiBadge,
-  }) {
-    final isSelected = _selectedType == type;
-
-    return GestureDetector(
-      onTap: () => setState(() => _selectedType = type),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? colors.signal2.withValues(alpha: 0.1)
-              : colors.bg,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? colors.signal2 : colors.line,
-            width: isSelected ? 1.5 : 1,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(
-                  icon,
-                  size: 20,
-                  color: isSelected ? colors.signal2 : colors.ink2,
-                ),
-                if (hasAiBadge)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: colors.signal2.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      '✦ AI',
-                      style: TextStyle(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w800,
-                        color: colors.signal2,
-                        fontFamily: 'SpaceMono',
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              type.label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: colors.ink,
-              ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              type.sublabel,
-              style: TextStyle(
-                fontSize: 8,
-                fontWeight: FontWeight.w700,
-                color: colors.ink3,
-                letterSpacing: 0.4,
-                fontFamily: 'SpaceMono',
-              ),
-            ),
-            if (isSelected) ...[
-              const SizedBox(height: 8),
-              Text(
-                type.aiDescription,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: colors.signal2,
-                  height: 1.4,
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  // -------------------------------------------------------------
-  // STEP 2: BASICS
-  // -------------------------------------------------------------
-  Widget _buildStep2Basics(BitoColorScheme colors) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+        // Basics Fields
         _buildFieldLabel('CHALLENGE NAME *', colors),
         const SizedBox(height: 6),
         _buildTextInput(
@@ -562,7 +456,7 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
         _buildTextInput(
           controller: _descriptionController,
           hint: 'Describe the challenge goal for the group...',
-          maxLines: 3,
+          maxLines: 2,
           colors: colors,
         ),
         const SizedBox(height: 16),
@@ -607,10 +501,96 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
     );
   }
 
+  Widget _buildTypeCard(
+    BitoColorScheme colors, {
+    required ChallengeType type,
+    required IconData icon,
+    required bool hasAiBadge,
+  }) {
+    final isSelected = _selectedType == type;
+
+    return GestureDetector(
+      onTap: () => setState(() {
+        _selectedType = type;
+        if (_titleController.text.isEmpty ||
+            _titleController.text.contains('Challenge') ||
+            _titleController.text.contains('Streak')) {
+          _titleController.text = '14-Day ${type.label} Challenge';
+        }
+      }),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? colors.signal2.withValues(alpha: 0.1)
+              : colors.bg,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? colors.signal2 : colors.line,
+            width: isSelected ? 1.5 : 1,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  icon,
+                  size: 20,
+                  color: isSelected ? colors.signal2 : colors.ink2,
+                ),
+                if (hasAiBadge)
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: colors.signal2.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      '✦ AI',
+                      style: TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w800,
+                        color: colors.signal2,
+                        fontFamily: 'SpaceMono',
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              type.label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: colors.ink,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              type.sublabel,
+              style: TextStyle(
+                fontSize: 8,
+                fontWeight: FontWeight.w700,
+                color: colors.ink3,
+                letterSpacing: 0.4,
+                fontFamily: 'SpaceMono',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   // -------------------------------------------------------------
-  // STEP 3: TARGETS (Screenshot 2)
+  // STEP 2: TARGET & HABIT (Merged Targets, Habit Link & Match Mode)
   // -------------------------------------------------------------
-  Widget _buildStep3Targets(BitoColorScheme colors) {
+  Widget _buildStep2TargetAndHabit(BitoColorScheme colors) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -654,13 +634,22 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
         ),
         const SizedBox(height: 18),
 
-        // LINK TO HABIT (OPTIONAL)
-        _buildFieldLabel('LINK TO HABIT (OPTIONAL)', colors),
+        // LINK TO HABIT (Consolidated)
+        _buildFieldLabel('LINK TO GROUP HABIT (OPTIONAL)', colors),
         const SizedBox(height: 6),
         _buildDropdown(
           value: _selectedHabitLink,
           items: _habitLinkOptions,
-          onChanged: (v) => setState(() => _selectedHabitLink = v!),
+          onChanged: (v) {
+            if (v != null) {
+              setState(() {
+                _selectedHabitLink = v;
+                if (v != 'Any habit') {
+                  _personalHabit = v;
+                }
+              });
+            }
+          },
           colors: colors,
         ),
         const SizedBox(height: 18),
@@ -689,9 +678,9 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
   }
 
   // -------------------------------------------------------------
-  // STEP 4: SETTINGS (Screenshot 5)
+  // STEP 3: SETTINGS & PERSONAL HABIT
   // -------------------------------------------------------------
-  Widget _buildStep4Settings(BitoColorScheme colors) {
+  Widget _buildStep3Settings(BitoColorScheme colors) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -722,54 +711,92 @@ class _CreateChallengeSheetState extends ConsumerState<CreateChallengeSheet> {
           keyboardType: TextInputType.number,
           colors: colors,
         ),
-      ],
-    );
-  }
+        const SizedBox(height: 24),
 
-  // -------------------------------------------------------------
-  // STEP 5: YOUR HABIT
-  // -------------------------------------------------------------
-  Widget _buildStep5YourHabit(BitoColorScheme colors) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildFieldLabel('SELECT YOUR HABIT TO TRACK THIS CHALLENGE', colors),
-        const SizedBox(height: 10),
-        ...['Morning run', 'Yoga', 'Evening run', 'Create new habit'].map((h) {
-          final isSelected = _personalHabit == h;
-          return GestureDetector(
-            onTap: () => setState(() => _personalHabit = h),
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 8),
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? colors.signal2.withValues(alpha: 0.12)
-                    : colors.bg,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: isSelected ? colors.signal2 : colors.line,
+        // PERSONAL HABIT TRACKING (Unified & Auto-synced)
+        _buildFieldLabel('YOUR HABIT TO TRACK THIS CHALLENGE', colors),
+        const SizedBox(height: 8),
+
+        if (_selectedHabitLink != 'Any habit') ...[
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: colors.signal2.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: colors.signal2),
+            ),
+            child: Row(
+              children: [
+                Icon(PhosphorIcons.link(), size: 18, color: colors.signal2),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Synced with Linked Habit',
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                          color: colors.signal2,
+                          fontFamily: 'SpaceMono',
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        _personalHabit,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: colors.ink,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(PhosphorIcons.checkCircle(),
+                    color: colors.signal2, size: 18),
+              ],
+            ),
+          ),
+        ] else ...[
+          ...['Morning run', 'Yoga', 'Evening run', 'Create new habit'].map((h) {
+            final isSelected = _personalHabit == h;
+            return GestureDetector(
+              onTap: () => setState(() => _personalHabit = h),
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? colors.signal2.withValues(alpha: 0.12)
+                      : colors.bg,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: isSelected ? colors.signal2 : colors.line,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      h,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: isSelected ? colors.signal2 : colors.ink,
+                      ),
+                    ),
+                    if (isSelected)
+                      Icon(PhosphorIcons.checkCircle(),
+                          color: colors.signal2, size: 18),
+                  ],
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    h,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: isSelected ? colors.signal2 : colors.ink,
-                    ),
-                  ),
-                  if (isSelected)
-                    Icon(PhosphorIcons.checkCircle(),
-                        color: colors.signal2, size: 18),
-                ],
-              ),
-            ),
-          );
-        }),
+            );
+          }),
+        ],
       ],
     );
   }

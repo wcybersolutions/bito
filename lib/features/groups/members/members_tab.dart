@@ -26,11 +26,7 @@ class MembersTab extends StatefulWidget {
   final Group group;
   final VoidCallback onInvite;
 
-  const MembersTab({
-    super.key,
-    required this.group,
-    required this.onInvite,
-  });
+  const MembersTab({super.key, required this.group, required this.onInvite});
 
   @override
   State<MembersTab> createState() => _MembersTabState();
@@ -92,10 +88,7 @@ class _MembersTabState extends State<MembersTab> {
               style: TextStyle(color: colors.ink, fontSize: 13),
               decoration: InputDecoration(
                 hintText: 'Search members',
-                hintStyle: TextStyle(
-                  color: colors.ink3,
-                  fontSize: 13,
-                ),
+                hintStyle: TextStyle(color: colors.ink3, fontSize: 13),
                 prefixIcon: Icon(
                   PhosphorIcons.magnifyingGlass(),
                   size: 16,
@@ -169,7 +162,7 @@ class _MembersTabState extends State<MembersTab> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: _filteredMembers.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            separatorBuilder: (_, _) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
               final member = _filteredMembers[index];
               return _buildMemberCard(context, colors, member);
@@ -199,11 +192,7 @@ class _MembersTabState extends State<MembersTab> {
           CircleAvatar(
             radius: 18,
             backgroundColor: colors.surface2,
-            child: Icon(
-              PhosphorIcons.user(),
-              size: 18,
-              color: colors.ink,
-            ),
+            child: Icon(PhosphorIcons.user(), size: 18, color: colors.ink),
           ),
           const SizedBox(width: 12),
 
@@ -257,9 +246,7 @@ class _MembersTabState extends State<MembersTab> {
             decoration: BoxDecoration(
               color: colors.surface2,
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(
-                color: colors.line,
-              ),
+              border: Border.all(color: colors.line),
             ),
             child: Text(
               member.role,

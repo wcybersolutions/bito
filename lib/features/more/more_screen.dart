@@ -1,127 +1,167 @@
 // lib/features/more/more_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:go_router/go_router.dart';
+// import '../../theme/theme_extensions.dart';
+import '../../shared/shared.dart';
 
-import '../../theme/theme_extensions.dart';
-
-class MoreScreen extends StatelessWidget {
+class MoreScreen extends ConsumerWidget {
   const MoreScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
 
     return Scaffold(
-      backgroundColor: colors.bg,
+      backgroundColor: Colors.transparent,
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            // ── Header ──────────────────────────────────────────────────────
-            Text(
-              'MORE',
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: colors.ink3,
-                letterSpacing: 1.5,
-                fontFamily: 'SpaceMono',
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Explore',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
-                color: colors.ink,
-                letterSpacing: -0.5,
-              ),
-            ),
-            const SizedBox(height: 28),
-
-            // ── Quick Links ─────────────────────────────────────────────────
-            _SectionLabel(label: 'QUICK LINKS', colors: colors),
-            const SizedBox(height: 8),
-            _SettingsCard(
-              colors: colors,
-              children: [
-                _NavRow(
-                  icon: PhosphorIcons.repeat(),
-                  label: 'Habits',
-                  subtitle: 'Track your daily & weekly habits',
-                  colors: colors,
-                  onTap: () => context.go('/habits'),
-                ),
-                _Divider(colors: colors),
-                _NavRow(
-                  icon: PhosphorIcons.notePencil(),
-                  label: 'Journal',
-                  subtitle: 'Daily reflections and entries',
-                  colors: colors,
-                  onTap: () => context.go('/journal'),
-                ),
-                _Divider(colors: colors),
-                _NavRow(
-                  icon: PhosphorIcons.compass(),
-                  label: 'Compass',
-                  subtitle: 'Your values and long-term goals',
-                  colors: colors,
-                  onTap: () => context.go('/compass'),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 24),
-
-            // ── Account ─────────────────────────────────────────────────────
-            _SectionLabel(label: 'ACCOUNT', colors: colors),
-            const SizedBox(height: 8),
-            _SettingsCard(
-              colors: colors,
-              children: [
-                _NavRow(
-                  icon: PhosphorIcons.user(),
-                  label: 'Profile',
-                  subtitle: 'Edit your name, avatar, and bio',
-                  colors: colors,
-                  onTap: () => context.go('/profile'),
-                ),
-                _Divider(colors: colors),
-                _NavRow(
-                  icon: PhosphorIcons.bell(),
-                  label: 'Notifications',
-                  subtitle: 'Manage reminders and alerts',
-                  colors: colors,
-                  onTap: () => context.go('/notifications'),
-                ),
-                _Divider(colors: colors),
-                _NavRow(
-                  icon: PhosphorIcons.gear(),
-                  label: 'Settings',
-                  subtitle: 'Preferences, data, and account',
-                  colors: colors,
-                  onTap: () => context.go('/settings'),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 24),
-
-            // ── App version ─────────────────────────────────────────────────
-            Center(
-              child: Text(
-                'bito  ·  v1.0.0',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: colors.ink3,
-                  fontFamily: 'SpaceMono',
-                  letterSpacing: 0.5,
+            Expanded(
+              child: GestureDetector(
+                onTap: () => context.go('/'),
+                child: Container(
+                  color: Colors.transparent,
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            // Bottom sheet
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: colors.bg,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+                border: Border(
+                  top: BorderSide(color: colors.line),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 12, bottom: 8),
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: colors.line2,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  // Header
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 8,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'MORE',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: colors.ink3,
+                            letterSpacing: 1.5,
+                            fontFamily: 'SpaceMono',
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () => context.go('/'),
+                          icon: Icon(
+                            PhosphorIcons.x(),
+                            size: 18,
+                            color: colors.ink2,
+                          ),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // Content
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        
+                        _MenuItem(
+                          icon: PhosphorIcons.gear(),
+                          label: 'Settings',
+                          colors: colors,
+                          onTap: () => context.go('/settings'),
+                        ),
+                        const SizedBox(height: 8),
+
+                        _MenuItem(
+                          icon: PhosphorIcons.repeat(),
+                          label: 'Habits',
+                          colors: colors,
+                          onTap: () => context.go('/habits'),
+                        ),
+                        const SizedBox(height: 8),
+
+                        _MenuItem(
+                          icon: PhosphorIcons.notePencil(),
+                          label: 'Journal',
+                          colors: colors,
+                          onTap: () => context.go('/journal'),
+                        ),
+                        const SizedBox(height: 8),
+
+                        _MenuItem(
+                          icon: PhosphorIcons.compass(),
+                          label: 'Compass',
+                          colors: colors,
+                          onTap: () => context.go('/compass'),
+                        ),
+                        const SizedBox(height: 16),
+                        const ThemeDropdown(),
+                        const SizedBox(height: 12),
+
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: colors.error.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Sign out',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: colors.error,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        // App version
+                        Center(
+                          child: Text(
+                            'bito  ·  v1.0.0',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: colors.ink3,
+                              fontFamily: 'SpaceMono',
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -129,57 +169,18 @@ class MoreScreen extends StatelessWidget {
   }
 }
 
-// ── Shared sub-widgets ──────────────────────────────────────────────────────
+// ── Menu Item Widget ──────────────────────────────────────────────────────
 
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel({required this.label, required this.colors});
-  final String label;
-  final BitoColorScheme colors;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      label,
-      style: TextStyle(
-        fontSize: 10,
-        fontWeight: FontWeight.w700,
-        color: colors.ink3,
-        letterSpacing: 1.2,
-        fontFamily: 'SpaceMono',
-      ),
-    );
-  }
-}
-
-class _SettingsCard extends StatelessWidget {
-  const _SettingsCard({required this.colors, required this.children});
-  final BitoColorScheme colors;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: colors.line),
-      ),
-      child: Column(children: children),
-    );
-  }
-}
-
-class _NavRow extends StatelessWidget {
-  const _NavRow({
+class _MenuItem extends StatelessWidget {
+  const _MenuItem({
     required this.icon,
     required this.label,
-    required this.subtitle,
     required this.colors,
     required this.onTap,
   });
+
   final IconData icon;
   final String label;
-  final String subtitle;
   final BitoColorScheme colors;
   final VoidCallback onTap;
 
@@ -187,42 +188,32 @@ class _NavRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: colors.surface,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: colors.line),
+        ),
         child: Row(
           children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: colors.surface2,
-                borderRadius: BorderRadius.circular(9),
-              ),
-              child: Icon(icon, size: 18, color: colors.ink2),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: colors.ink,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: TextStyle(fontSize: 12, color: colors.ink3),
-                  ),
-                ],
+            Icon(icon, size: 20, color: colors.ink2),
+            const SizedBox(width: 12),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: colors.ink,
               ),
             ),
-            Icon(PhosphorIcons.caretRight(), size: 16, color: colors.ink3),
+            const Spacer(),
+            Icon(
+              PhosphorIcons.caretRight(),
+              size: 16,
+              color: colors.ink3,
+            ),
           ],
         ),
       ),
@@ -230,12 +221,3 @@ class _NavRow extends StatelessWidget {
   }
 }
 
-class _Divider extends StatelessWidget {
-  const _Divider({required this.colors});
-  final BitoColorScheme colors;
-
-  @override
-  Widget build(BuildContext context) {
-    return Divider(height: 1, indent: 66, color: colors.line);
-  }
-}

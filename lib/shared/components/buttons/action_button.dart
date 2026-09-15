@@ -1,6 +1,5 @@
 // lib/shared/components/buttons/action_button.dart
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:bito/theme/theme_extensions.dart';
 
 enum ButtonType { primary, secondary, outline, cancel }
@@ -45,32 +44,29 @@ class ActionButton extends StatelessWidget {
           ),
           child: isLoading
               ? SizedBox(
-            height: 20,
-            width: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: Colors.black, // Changed to black
-            ),
-          )
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.black, // Changed to black
+                  ),
+                )
               : Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (icon != null) ...[
-                icon!,
-                const SizedBox(width: 8),
-              ],
-              Text(
-                text,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black, // Changed to black
-                  letterSpacing: 0.5,
-                  fontFamily: 'SpaceMono',
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (icon != null) ...[icon!, const SizedBox(width: 8)],
+                    Text(
+                      text,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black, // Changed to black
+                        letterSpacing: 0.5,
+                        fontFamily: 'SpaceMono',
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         );
         break;
 
@@ -89,10 +85,7 @@ class ActionButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (icon != null) ...[
-                icon!,
-                const SizedBox(width: 8),
-              ],
+              if (icon != null) ...[icon!, const SizedBox(width: 8)],
               Text(
                 text,
                 style: TextStyle(
@@ -123,10 +116,7 @@ class ActionButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (icon != null) ...[
-                icon!,
-                const SizedBox(width: 8),
-              ],
+              if (icon != null) ...[icon!, const SizedBox(width: 8)],
               Text(
                 text,
                 style: TextStyle(
@@ -157,10 +147,7 @@ class ActionButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (icon != null) ...[
-                icon!,
-                const SizedBox(width: 8),
-              ],
+              if (icon != null) ...[icon!, const SizedBox(width: 8)],
               Text(
                 text,
                 style: TextStyle(
@@ -177,11 +164,6 @@ class ActionButton extends StatelessWidget {
         break;
     }
 
-    return expanded
-        ? SizedBox(
-      width: double.infinity,
-      child: button,
-    )
-        : button;
+    return expanded ? SizedBox(width: double.infinity, child: button) : button;
   }
 }

@@ -4,18 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../theme/theme_extensions.dart';
 import '../../shared/shared.dart';
 import '../../data/providers/habit_creation_provider.dart';
-import '../../domain/entities/habit.dart';
 
 class CreateHabitStep1 extends ConsumerStatefulWidget {
   final bool isEditing;
 
-  const CreateHabitStep1({
-    super.key,
-    this.isEditing = false,
-  });
+  const CreateHabitStep1({super.key, this.isEditing = false});
 
   @override
   ConsumerState<CreateHabitStep1> createState() => _CreateHabitStep1State();
@@ -28,7 +23,12 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
   late String _selectedIcon;
 
   final List<String> _categories = [
-    'Activity', 'Health', 'Mind', 'Productivity', 'Life', 'Sleep'
+    'Activity',
+    'Health',
+    'Mind',
+    'Productivity',
+    'Life',
+    'Sleep',
   ];
 
   final Map<String, List<Map<String, dynamic>>> _categoryIcons = {
@@ -95,8 +95,7 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
     'Other': 'Productivity',
   };
 
-  String _toValidCategory(String cat) =>
-      _categoryKeyMap[cat] ?? 'Productivity';
+  String _toValidCategory(String cat) => _categoryKeyMap[cat] ?? 'Productivity';
 
   @override
   void initState() {
@@ -105,7 +104,9 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
     _habitName = state.name;
     _nameController = TextEditingController(text: _habitName);
     // Map incoming category to one that exists in _categoryIcons
-    final incoming = state.category.isNotEmpty ? state.category : 'Productivity';
+    final incoming = state.category.isNotEmpty
+        ? state.category
+        : 'Productivity';
     _selectedCategory = _toValidCategory(incoming);
     _selectedIcon = state.icon.isNotEmpty ? state.icon : 'target';
   }
@@ -204,24 +205,33 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
                                 spacing: 8,
                                 runSpacing: 8,
                                 children: _categories.map((category) {
-                                  final isSelected = _selectedCategory == category;
+                                  final isSelected =
+                                      _selectedCategory == category;
                                   return GestureDetector(
                                     onTap: () {
                                       setState(() {
                                         _selectedCategory = category;
                                         final icons = _categoryIcons[category];
                                         if (icons != null && icons.isNotEmpty) {
-                                          _selectedIcon = icons.first['name'] as String;
+                                          _selectedIcon =
+                                              icons.first['name'] as String;
                                         }
                                       });
                                     },
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                        horizontal: 12,
+                                      ),
                                       decoration: BoxDecoration(
-                                        color: isSelected ? colors.signal2 : colors.surface,
+                                        color: isSelected
+                                            ? colors.signal2
+                                            : colors.surface,
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                          color: isSelected ? colors.signal2 : colors.line,
+                                          color: isSelected
+                                              ? colors.signal2
+                                              : colors.line,
                                         ),
                                       ),
                                       child: Text(
@@ -229,7 +239,9 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
                                         style: TextStyle(
                                           fontSize: 9,
                                           fontWeight: FontWeight.w700,
-                                          color: isSelected ? colors.signalInk : colors.ink2,
+                                          color: isSelected
+                                              ? colors.signalInk
+                                              : colors.ink2,
                                           letterSpacing: 0.3,
                                           fontFamily: 'SpaceMono',
                                         ),
@@ -253,32 +265,45 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
                               Wrap(
                                 spacing: 12,
                                 runSpacing: 12,
-                                children: (_categoryIcons[_selectedCategory] ?? _categoryIcons['Productivity']!).map((iconData) {
-                                  final isSelected = _selectedIcon == iconData['name'];
-                                  return GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _selectedIcon = iconData['name'];
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 48,
-                                      height: 48,
-                                      decoration: BoxDecoration(
-                                        color: isSelected ? colors.signal2 : colors.surface,
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          color: isSelected ? colors.signal2 : colors.line,
-                                        ),
-                                      ),
-                                      child: Icon(
-                                        iconData['icon'],
-                                        size: 24,
-                                        color: isSelected ? colors.signalInk : colors.ink2,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
+                                children:
+                                    (_categoryIcons[_selectedCategory] ??
+                                            _categoryIcons['Productivity']!)
+                                        .map((iconData) {
+                                          final isSelected =
+                                              _selectedIcon == iconData['name'];
+                                          return GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _selectedIcon =
+                                                    iconData['name'];
+                                              });
+                                            },
+                                            child: Container(
+                                              width: 48,
+                                              height: 48,
+                                              decoration: BoxDecoration(
+                                                color: isSelected
+                                                    ? colors.signal2
+                                                    : colors.surface,
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                border: Border.all(
+                                                  color: isSelected
+                                                      ? colors.signal2
+                                                      : colors.line,
+                                                ),
+                                              ),
+                                              child: Icon(
+                                                iconData['icon'],
+                                                size: 24,
+                                                color: isSelected
+                                                    ? colors.signalInk
+                                                    : colors.ink2,
+                                              ),
+                                            ),
+                                          );
+                                        })
+                                        .toList(),
                               ),
                             ],
                           ),
@@ -297,10 +322,10 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
   }
 
   Widget _buildCardHeader(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -308,17 +333,11 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
         children: [
           Text(
             widget.isEditing ? 'Edit Habit' : 'New Habit',
-            style: textTheme.headlineSmall?.copyWith(
-              color: colors.ink,
-            ),
+            style: textTheme.headlineSmall?.copyWith(color: colors.ink),
           ),
           IconButton(
             onPressed: () => context.go('/habits'),
-            icon: Icon(
-              PhosphorIcons.x(),
-              size: 20,
-              color: colors.ink2,
-            ),
+            icon: Icon(PhosphorIcons.x(), size: 20, color: colors.ink2),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
           ),
@@ -400,9 +419,7 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: colors.line),
-        ),
+        border: Border(top: BorderSide(color: colors.line)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -410,11 +427,7 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
           ActionButton(
             text: 'CANCEL',
             type: ButtonType.cancel,
-            icon: Icon(
-              PhosphorIcons.x(),
-              size: 16,
-              color: colors.ink2,
-            ),
+            icon: Icon(PhosphorIcons.x(), size: 16, color: colors.ink2),
             onPressed: () => context.go('/habits'),
             expanded: false,
           ),
@@ -430,13 +443,16 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
                 return;
               }
               ref.read(habitCreationProvider.notifier).updateName(_habitName);
-              ref.read(habitCreationProvider.notifier).updateIcon(_selectedIcon);
-              ref.read(habitCreationProvider.notifier).updateCategory(_selectedCategory);
+              ref
+                  .read(habitCreationProvider.notifier)
+                  .updateIcon(_selectedIcon);
+              ref
+                  .read(habitCreationProvider.notifier)
+                  .updateCategory(_selectedCategory);
 
               final isEditing = widget.isEditing;
-              context.go(isEditing
-                  ? '/habits/edit/step2'
-                  : '/habits/create/step2'
+              context.go(
+                isEditing ? '/habits/edit/step2' : '/habits/create/step2',
               );
             },
             style: ElevatedButton.styleFrom(
@@ -461,11 +477,7 @@ class _CreateHabitStep1State extends ConsumerState<CreateHabitStep1> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
-                  PhosphorIcons.arrowRight(),
-                  size: 16,
-                  color: Colors.black,
-                ),
+                Icon(PhosphorIcons.arrowRight(), size: 16, color: Colors.black),
               ],
             ),
           ),

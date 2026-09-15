@@ -27,7 +27,6 @@ import '../features/habits/create_habit_step1.dart';
 import '../features/habits/create_habit_step2.dart';
 import '../features/habits/create_habit_step3.dart';
 import '../features/habits/create_habit_step4.dart';
-import '../features/habits/widgets/habit_card.dart';
 import '../features/habits/edit_habit_screen.dart';
 
 // Groups Creation
@@ -131,8 +130,8 @@ final GoRouter router = GoRouter(
 
         // lib/app/router.dart - Add these routes inside the ShellRoute
 
-// Add these after the create habit routes:
-// Edit Habit Routes (reuse step screens with isEditing=true)
+        // Add these after the create habit routes:
+        // Edit Habit Routes (reuse step screens with isEditing=true)
         GoRoute(
           path: '/habits/edit/step1',
           name: 'editHabitStep1',
@@ -154,7 +153,7 @@ final GoRouter router = GoRouter(
           builder: (context, state) => const CreateHabitStep4(isEditing: true),
         ),
 
-// Entry point for editing
+        // Entry point for editing
         GoRoute(
           path: '/habits/:habitId/edit',
           name: 'editHabit',

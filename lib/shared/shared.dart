@@ -3,6 +3,11 @@
 // App Bar
 export 'components/app_bar/app_header.dart';
 
+// lib/shared/shared.dart
+// Add theme provider export
+export '../core/providers/theme_provider.dart';
+export 'components/theme_dropdown.dart';
+
 // Buttons
 export 'components/buttons/icon_button.dart';
 export 'components/buttons/primary_button.dart';
@@ -45,4 +50,6 @@ export '../theme/theme_extensions.dart';
 
 // Utils
 export 'utils/debouncer.dart';
+
+
 

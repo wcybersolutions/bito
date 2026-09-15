@@ -15,18 +15,18 @@ import 'package:bito/features/journal/widgets/journal_text_controller.dart';
 class CreateJournalScreen extends ConsumerStatefulWidget {
   final String? entryId;
 
-  const CreateJournalScreen({
-    super.key,
-    this.entryId,
-  });
+  const CreateJournalScreen({super.key, this.entryId});
 
   @override
-  ConsumerState<CreateJournalScreen> createState() => _CreateJournalScreenState();
+  ConsumerState<CreateJournalScreen> createState() =>
+      _CreateJournalScreenState();
 }
 
 class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
   late JournalTextEditingController _editorController;
-  final Debouncer _autoSaveDebouncer = Debouncer(delay: const Duration(milliseconds: 800));
+  final Debouncer _autoSaveDebouncer = Debouncer(
+    delay: const Duration(milliseconds: 800),
+  );
 
   String _entryId = '';
   DateTime _entryDate = DateTime.now();
@@ -41,7 +41,8 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
   @override
   void initState() {
     super.initState();
-    _entryId = widget.entryId ?? DateTime.now().millisecondsSinceEpoch.toString();
+    _entryId =
+        widget.entryId ?? DateTime.now().millisecondsSinceEpoch.toString();
   }
 
   @override
@@ -66,17 +67,23 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
       } else {
         // Look for today's entry
         final now = DateTime.now();
-        existing = entries.where((e) =>
-            e.date.year == now.year &&
-            e.date.month == now.month &&
-            e.date.day == now.day).firstOrNull;
+        existing = entries
+            .where(
+              (e) =>
+                  e.date.year == now.year &&
+                  e.date.month == now.month &&
+                  e.date.day == now.day,
+            )
+            .firstOrNull;
       }
 
       if (existing != null && mounted) {
         setState(() {
           _entryId = existing!.id;
           _entryDate = existing.date;
-          _selectedMood = existing.mood != null ? JournalMood.values.indexOf(existing.mood!) : null;
+          _selectedMood = existing.mood != null
+              ? JournalMood.values.indexOf(existing.mood!)
+              : null;
           _selectedEnergy = existing.energy;
           _quickLogs = List.from(existing.quickLogs);
           _editorController.text = existing.longFormContent;
@@ -94,7 +101,10 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
     if (sel.isValid && sel.isCollapsed && sel.start > 0) {
       final charBefore = text.substring(sel.start - 1, sel.start);
       if (charBefore == '/') {
-        final isLineStartOrSpaced = sel.start == 1 || text[sel.start - 2] == '\n' || text[sel.start - 2] == ' ';
+        final isLineStartOrSpaced =
+            sel.start == 1 ||
+            text[sel.start - 2] == '\n' ||
+            text[sel.start - 2] == ' ';
         if (isLineStartOrSpaced && !_showBlockMenu) {
           setState(() {
             _showBlockMenu = true;
@@ -126,7 +136,9 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
       final content = _editorController.text;
 
       JournalMood? mood;
-      if (_selectedMood != null && _selectedMood! >= 0 && _selectedMood! < JournalMood.values.length) {
+      if (_selectedMood != null &&
+          _selectedMood! >= 0 &&
+          _selectedMood! < JournalMood.values.length) {
         mood = JournalMood.values[_selectedMood!];
       }
 
@@ -253,7 +265,9 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
         _editorController.insertBlock('@');
         break;
       case 'Date':
-        final nowFormatted = DateFormat('EEEE, MMM d, yyyy').format(DateTime.now());
+        final nowFormatted = DateFormat(
+          'EEEE, MMM d, yyyy',
+        ).format(DateTime.now());
         _editorController.insertBlock('[Date: $nowFormatted] ');
         break;
     }
@@ -261,7 +275,9 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
 
   void _showImageInsertDialog() {
     final textController = TextEditingController();
-    final urlController = TextEditingController(text: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb');
+    final urlController = TextEditingController(
+      text: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+    );
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
 
     showDialog(
@@ -287,7 +303,10 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                 labelText: 'Caption/Alt Text',
                 labelStyle: TextStyle(color: colors.ink3, fontSize: 12),
                 hintText: 'Morning mountain reflection',
-                hintStyle: TextStyle(color: colors.ink3.withOpacity(0.5), fontSize: 12),
+                hintStyle: TextStyle(
+                  color: colors.ink3.withOpacity(0.5),
+                  fontSize: 12,
+                ),
               ),
               style: TextStyle(color: colors.ink),
             ),
@@ -305,17 +324,29 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('CANCEL', style: TextStyle(color: colors.ink3, fontFamily: 'SpaceMono')),
+            child: Text(
+              'CANCEL',
+              style: TextStyle(color: colors.ink3, fontFamily: 'SpaceMono'),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
-              final alt = textController.text.trim().isEmpty ? 'Image' : textController.text.trim();
+              final alt = textController.text.trim().isEmpty
+                  ? 'Image'
+                  : textController.text.trim();
               final url = urlController.text.trim();
               _editorController.insertBlock('\n![$alt]($url)\n');
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(backgroundColor: colors.signal),
-            child: const Text('INSERT', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: 'SpaceMono')),
+            child: const Text(
+              'INSERT',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'SpaceMono',
+              ),
+            ),
           ),
         ],
       ),
@@ -325,9 +356,36 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
   void _showEmojiPicker() {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
     final emojis = [
-      '✨', '🔥', '💡', '🎯', '🏃‍♂️', '☕', '🧘', '❤️', '📝', '⚡',
-      '🌱', '🚀', '🧠', '💪', '🏆', '⭐', '🌟', '🎉', '📚', '🎨',
-      '🌿', '🌊', '☀️', '🌙', '🕊️', '🔋', '💎', '🔑', '🌈', '👏'
+      '✨',
+      '🔥',
+      '💡',
+      '🎯',
+      '🏃‍♂️',
+      '☕',
+      '🧘',
+      '❤️',
+      '📝',
+      '⚡',
+      '🌱',
+      '🚀',
+      '🧠',
+      '💪',
+      '🏆',
+      '⭐',
+      '🌟',
+      '🎉',
+      '📚',
+      '🎨',
+      '🌿',
+      '🌊',
+      '☀️',
+      '🌙',
+      '🕊️',
+      '🔋',
+      '💎',
+      '🔑',
+      '🌈',
+      '👏',
     ];
 
     showModalBottomSheet(
@@ -432,7 +490,10 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
               style: TextStyle(color: colors.ink, fontSize: 14),
               decoration: InputDecoration(
                 hintText: 'What\'s on your mind right now?',
-                hintStyle: TextStyle(color: colors.ink3, fontStyle: FontStyle.italic),
+                hintStyle: TextStyle(
+                  color: colors.ink3,
+                  fontStyle: FontStyle.italic,
+                ),
                 filled: true,
                 fillColor: colors.bg,
                 border: OutlineInputBorder(
@@ -471,8 +532,13 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colors.signal,
                   foregroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
                 ),
                 icon: Icon(PhosphorIcons.paperPlaneRight(), size: 14),
                 label: const Text(
@@ -523,21 +589,43 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _buildFormatButton(Icons.format_bold, 'Bold', colors, () {
-                    _editorController.applyInlineFormat(prefix: '**', suffix: '**');
+                    _editorController.applyInlineFormat(
+                      prefix: '**',
+                      suffix: '**',
+                    );
                     Navigator.pop(context);
                   }),
                   _buildFormatButton(Icons.format_italic, 'Italic', colors, () {
-                    _editorController.applyInlineFormat(prefix: '*', suffix: '*');
+                    _editorController.applyInlineFormat(
+                      prefix: '*',
+                      suffix: '*',
+                    );
                     Navigator.pop(context);
                   }),
-                  _buildFormatButton(Icons.format_underline, 'Underline', colors, () {
-                    _editorController.applyInlineFormat(prefix: '<u>', suffix: '</u>');
-                    Navigator.pop(context);
-                  }),
-                  _buildFormatButton(Icons.format_strikethrough, 'Strike', colors, () {
-                    _editorController.applyInlineFormat(prefix: '~~', suffix: '~~');
-                    Navigator.pop(context);
-                  }),
+                  _buildFormatButton(
+                    Icons.format_underline,
+                    'Underline',
+                    colors,
+                    () {
+                      _editorController.applyInlineFormat(
+                        prefix: '<u>',
+                        suffix: '</u>',
+                      );
+                      Navigator.pop(context);
+                    },
+                  ),
+                  _buildFormatButton(
+                    Icons.format_strikethrough,
+                    'Strike',
+                    colors,
+                    () {
+                      _editorController.applyInlineFormat(
+                        prefix: '~~',
+                        suffix: '~~',
+                      );
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -545,17 +633,30 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _buildFormatButton(Icons.highlight, 'Highlight', colors, () {
-                    _editorController.applyInlineFormat(prefix: '==', suffix: '==');
+                    _editorController.applyInlineFormat(
+                      prefix: '==',
+                      suffix: '==',
+                    );
                     Navigator.pop(context);
                   }),
-                  _buildFormatButton(Icons.format_list_bulleted, 'List', colors, () {
-                    _editorController.applyLinePrefix('- ');
-                    Navigator.pop(context);
-                  }),
-                  _buildFormatButton(Icons.format_list_numbered, 'Numbered', colors, () {
-                    _editorController.applyLinePrefix('1. ');
-                    Navigator.pop(context);
-                  }),
+                  _buildFormatButton(
+                    Icons.format_list_bulleted,
+                    'List',
+                    colors,
+                    () {
+                      _editorController.applyLinePrefix('- ');
+                      Navigator.pop(context);
+                    },
+                  ),
+                  _buildFormatButton(
+                    Icons.format_list_numbered,
+                    'Numbered',
+                    colors,
+                    () {
+                      _editorController.applyLinePrefix('1. ');
+                      Navigator.pop(context);
+                    },
+                  ),
                   _buildFormatButton(Icons.format_quote, 'Quote', colors, () {
                     _editorController.applyLinePrefix('> ');
                     Navigator.pop(context);
@@ -578,23 +679,38 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _buildColorButton(colors.ink, 'Ink', colors, () {
-                    _editorController.applyInlineFormat(prefix: '[color:ink]', suffix: '[/color]');
+                    _editorController.applyInlineFormat(
+                      prefix: '[color:ink]',
+                      suffix: '[/color]',
+                    );
                     Navigator.pop(context);
                   }),
                   _buildColorButton(Colors.redAccent, 'Red', colors, () {
-                    _editorController.applyInlineFormat(prefix: '[color:red]', suffix: '[/color]');
+                    _editorController.applyInlineFormat(
+                      prefix: '[color:red]',
+                      suffix: '[/color]',
+                    );
                     Navigator.pop(context);
                   }),
                   _buildColorButton(Colors.lightBlueAccent, 'Blue', colors, () {
-                    _editorController.applyInlineFormat(prefix: '[color:blue]', suffix: '[/color]');
+                    _editorController.applyInlineFormat(
+                      prefix: '[color:blue]',
+                      suffix: '[/color]',
+                    );
                     Navigator.pop(context);
                   }),
                   _buildColorButton(Colors.greenAccent, 'Green', colors, () {
-                    _editorController.applyInlineFormat(prefix: '[color:green]', suffix: '[/color]');
+                    _editorController.applyInlineFormat(
+                      prefix: '[color:green]',
+                      suffix: '[/color]',
+                    );
                     Navigator.pop(context);
                   }),
                   _buildColorButton(colors.signal, 'Signal', colors, () {
-                    _editorController.applyInlineFormat(prefix: '[color:signal]', suffix: '[/color]');
+                    _editorController.applyInlineFormat(
+                      prefix: '[color:signal]',
+                      suffix: '[/color]',
+                    );
                     Navigator.pop(context);
                   }),
                 ],
@@ -614,22 +730,54 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildColorButton(Colors.yellow.withOpacity(0.5), 'Yellow', colors, () {
-                    _editorController.applyInlineFormat(prefix: '[bg:yellow]', suffix: '[/bg]');
-                    Navigator.pop(context);
-                  }),
-                  _buildColorButton(Colors.grey.withOpacity(0.5), 'Gray', colors, () {
-                    _editorController.applyInlineFormat(prefix: '[bg:gray]', suffix: '[/bg]');
-                    Navigator.pop(context);
-                  }),
-                  _buildColorButton(Colors.red.withOpacity(0.4), 'Red', colors, () {
-                    _editorController.applyInlineFormat(prefix: '[bg:red]', suffix: '[/bg]');
-                    Navigator.pop(context);
-                  }),
-                  _buildColorButton(Colors.green.withOpacity(0.4), 'Green', colors, () {
-                    _editorController.applyInlineFormat(prefix: '[bg:green]', suffix: '[/bg]');
-                    Navigator.pop(context);
-                  }),
+                  _buildColorButton(
+                    Colors.yellow.withOpacity(0.5),
+                    'Yellow',
+                    colors,
+                    () {
+                      _editorController.applyInlineFormat(
+                        prefix: '[bg:yellow]',
+                        suffix: '[/bg]',
+                      );
+                      Navigator.pop(context);
+                    },
+                  ),
+                  _buildColorButton(
+                    Colors.grey.withOpacity(0.5),
+                    'Gray',
+                    colors,
+                    () {
+                      _editorController.applyInlineFormat(
+                        prefix: '[bg:gray]',
+                        suffix: '[/bg]',
+                      );
+                      Navigator.pop(context);
+                    },
+                  ),
+                  _buildColorButton(
+                    Colors.red.withOpacity(0.4),
+                    'Red',
+                    colors,
+                    () {
+                      _editorController.applyInlineFormat(
+                        prefix: '[bg:red]',
+                        suffix: '[/bg]',
+                      );
+                      Navigator.pop(context);
+                    },
+                  ),
+                  _buildColorButton(
+                    Colors.green.withOpacity(0.4),
+                    'Green',
+                    colors,
+                    () {
+                      _editorController.applyInlineFormat(
+                        prefix: '[bg:green]',
+                        suffix: '[/bg]',
+                      );
+                      Navigator.pop(context);
+                    },
+                  ),
                   _buildFormatButton(Icons.format_clear, 'Clear', colors, () {
                     _clearFormatting();
                     Navigator.pop(context);
@@ -649,15 +797,28 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
     final sel = _editorController.selection;
     if (sel.isValid && !sel.isCollapsed) {
       var selected = text.substring(sel.start, sel.end);
-      selected = selected.replaceAll(RegExp(r'\*\*|\*|<u>|<\/u>|~~|==|\[color:[^\]]+\]|\[\/color\]|\[bg:[^\]]+\]|\[\/bg\]'), '');
+      selected = selected.replaceAll(
+        RegExp(
+          r'\*\*|\*|<u>|<\/u>|~~|==|\[color:[^\]]+\]|\[\/color\]|\[bg:[^\]]+\]|\[\/bg\]',
+        ),
+        '',
+      );
       _editorController.value = TextEditingValue(
         text: text.substring(0, sel.start) + selected + text.substring(sel.end),
-        selection: TextSelection(baseOffset: sel.start, extentOffset: sel.start + selected.length),
+        selection: TextSelection(
+          baseOffset: sel.start,
+          extentOffset: sel.start + selected.length,
+        ),
       );
     }
   }
 
-  Widget _buildFormatButton(IconData icon, String label, BitoColorScheme colors, VoidCallback onTap) {
+  Widget _buildFormatButton(
+    IconData icon,
+    String label,
+    BitoColorScheme colors,
+    VoidCallback onTap,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -685,7 +846,12 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
     );
   }
 
-  Widget _buildColorButton(Color color, String label, BitoColorScheme colors, VoidCallback onTap) {
+  Widget _buildColorButton(
+    Color color,
+    String label,
+    BitoColorScheme colors,
+    VoidCallback onTap,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -719,7 +885,15 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
     final colors = Theme.of(context).extension<BitoColorScheme>()!;
     final textTheme = Theme.of(context).textTheme;
     final now = _entryDate;
-    final dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.weekday % 7];
+    final dayName = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ][now.weekday % 7];
     final dayNumber = now.day;
 
     return Scaffold(
@@ -764,7 +938,10 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: colors.signal,
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       shape: RoundedRectangleBorder(
@@ -910,7 +1087,10 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                 onTap: _showQuickThoughtDialog,
                 borderRadius: BorderRadius.circular(8),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: colors.surface,
                     borderRadius: BorderRadius.circular(8),
@@ -934,7 +1114,9 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                       ),
                       const Spacer(),
                       Text(
-                        _quickLogs.isNotEmpty ? '${_quickLogs.length} notes' : '',
+                        _quickLogs.isNotEmpty
+                            ? '${_quickLogs.length} notes'
+                            : '',
                         style: TextStyle(
                           fontSize: 12,
                           color: colors.ink3,
@@ -963,12 +1145,17 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: _quickLogs.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
                       final log = _quickLogs[index];
-                      final timeStr = DateFormat('h:mm a').format(log.timestamp);
+                      final timeStr = DateFormat(
+                        'h:mm a',
+                      ).format(log.timestamp);
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: colors.surface2,
                           borderRadius: BorderRadius.circular(4),
@@ -987,11 +1174,10 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                               ),
                             ),
                             Text(
-                              log.content.length > 20 ? '${log.content.substring(0, 18)}...' : log.content,
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: colors.ink,
-                              ),
+                              log.content.length > 20
+                                  ? '${log.content.substring(0, 18)}...'
+                                  : log.content,
+                              style: TextStyle(fontSize: 11, color: colors.ink),
                             ),
                             const SizedBox(width: 4),
                             InkWell(
@@ -1001,7 +1187,11 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                                 });
                                 _triggerAutoSave();
                               },
-                              child: Icon(PhosphorIcons.x(), size: 10, color: colors.ink3),
+                              child: Icon(
+                                PhosphorIcons.x(),
+                                size: 10,
+                                color: colors.ink3,
+                              ),
                             ),
                           ],
                         ),
@@ -1034,7 +1224,8 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                         fontFamily: 'SpaceMono',
                       ),
                       decoration: InputDecoration(
-                        hintText: 'Enter text or type "/" for block commands\nUse formatting button for bold, italic, color...',
+                        hintText:
+                            'Enter text or type "/" for block commands\nUse formatting button for bold, italic, color...',
                         hintStyle: TextStyle(
                           color: colors.ink3.withOpacity(0.6),
                           fontSize: 13,
@@ -1074,7 +1265,9 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                           ],
                         ),
                         child: Icon(
-                          _showBlockMenu ? PhosphorIcons.x() : PhosphorIcons.plus(),
+                          _showBlockMenu
+                              ? PhosphorIcons.x()
+                              : PhosphorIcons.plus(),
                           size: 22,
                           color: Colors.black,
                         ),
@@ -1150,12 +1343,8 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                                 'Numbered list',
                                 'Bulleted list',
                               ], colors),
-                              _buildMenuSection('Advanced', [
-                                'Table',
-                              ], colors),
-                              _buildMenuSection('Media', [
-                                'Image',
-                              ], colors),
+                              _buildMenuSection('Advanced', ['Table'], colors),
+                              _buildMenuSection('Media', ['Image'], colors),
                               _buildMenuSection('Extras', [
                                 'Emojis',
                                 'Mention',
@@ -1220,7 +1409,9 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                           fontWeight: FontWeight.w700,
                           color: _saveStatus == 'SAVING...'
                               ? colors.signal
-                              : (_saveStatus == 'SAVED' ? colors.signal2 : colors.ink3),
+                              : (_saveStatus == 'SAVED'
+                                    ? colors.signal2
+                                    : colors.ink3),
                           fontFamily: 'SpaceMono',
                         ),
                       ),
@@ -1236,7 +1427,11 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
     );
   }
 
-  Widget _buildMenuSection(String title, List<String> items, BitoColorScheme colors) {
+  Widget _buildMenuSection(
+    String title,
+    List<String> items,
+    BitoColorScheme colors,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1253,21 +1448,20 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
             ),
           ),
         ),
-        ...items.map((item) => InkWell(
-          onTap: () => _handleBlockCommand(item),
-          borderRadius: BorderRadius.circular(4),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-            child: Text(
-              item,
-              style: TextStyle(
-                fontSize: 13,
-                color: colors.ink,
+        ...items.map(
+          (item) => InkWell(
+            onTap: () => _handleBlockCommand(item),
+            borderRadius: BorderRadius.circular(4),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+              child: Text(
+                item,
+                style: TextStyle(fontSize: 13, color: colors.ink),
               ),
             ),
           ),
-        )),
+        ),
         const SizedBox(height: 6),
       ],
     );

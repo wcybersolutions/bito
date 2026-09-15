@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:bito/theme/theme_extensions.dart';
 import 'package:bito/shared/shared.dart';
 import 'package:bito/data/groups/group.dart';
 import 'package:bito/data/groups/groups_provider.dart';
@@ -98,10 +97,10 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
   }
 
   Widget _buildHeader(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
@@ -139,10 +138,7 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
     );
   }
 
-  Widget _buildProgress(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildProgress(BuildContext context, BitoColorScheme colors) {
     final steps = ['DETAILS', 'STYLE', 'SETTINGS'];
     const activeStep = 0;
 
@@ -184,10 +180,10 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
   }
 
   Widget _buildCardHeader(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -195,17 +191,11 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
         children: [
           Text(
             'New Group',
-            style: textTheme.headlineSmall?.copyWith(
-              color: colors.ink,
-            ),
+            style: textTheme.headlineSmall?.copyWith(color: colors.ink),
           ),
           IconButton(
             onPressed: () => context.go('/groups'),
-            icon: Icon(
-              PhosphorIcons.x(),
-              size: 20,
-              color: colors.ink2,
-            ),
+            icon: Icon(PhosphorIcons.x(), size: 20, color: colors.ink2),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
           ),
@@ -214,10 +204,7 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
     );
   }
 
-  Widget _buildNameField(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildNameField(BuildContext context, BitoColorScheme colors) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -240,16 +227,10 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
           ),
           child: TextField(
             controller: _nameController,
-            style: TextStyle(
-              fontSize: 16,
-              color: colors.ink,
-            ),
+            style: TextStyle(fontSize: 16, color: colors.ink),
             decoration: InputDecoration(
               hintText: 'Morning Grind',
-              hintStyle: TextStyle(
-                color: colors.ink3,
-                fontSize: 16,
-              ),
+              hintStyle: TextStyle(color: colors.ink3, fontSize: 16),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
@@ -262,10 +243,7 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
     );
   }
 
-  Widget _buildDescriptionField(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildDescriptionField(BuildContext context, BitoColorScheme colors) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -289,16 +267,10 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
           child: TextField(
             controller: _descriptionController,
             maxLines: 3,
-            style: TextStyle(
-              fontSize: 16,
-              color: colors.ink,
-            ),
+            style: TextStyle(fontSize: 16, color: colors.ink),
             decoration: InputDecoration(
               hintText: 'Morning run',
-              hintStyle: TextStyle(
-                color: colors.ink3,
-                fontSize: 16,
-              ),
+              hintStyle: TextStyle(color: colors.ink3, fontSize: 16),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
@@ -311,10 +283,7 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
     );
   }
 
-  Widget _buildGroupTypeSelector(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildGroupTypeSelector(BuildContext context, BitoColorScheme colors) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -345,7 +314,10 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
                 });
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: isSelected ? colors.signal2 : Colors.black,
                   borderRadius: BorderRadius.circular(8),
@@ -382,16 +354,11 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
     );
   }
 
-  Widget _buildBottomActions(
-      BuildContext context,
-      BitoColorScheme colors,
-      ) {
+  Widget _buildBottomActions(BuildContext context, BitoColorScheme colors) {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: colors.line),
-        ),
+        border: Border(top: BorderSide(color: colors.line)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -399,11 +366,7 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
           ActionButton(
             text: 'CANCEL',
             type: ButtonType.cancel,
-            icon: Icon(
-              PhosphorIcons.arrowLeft(),
-              size: 16,
-              color: colors.ink2,
-            ),
+            icon: Icon(PhosphorIcons.arrowLeft(), size: 16, color: colors.ink2),
             onPressed: () => context.go('/groups'),
             expanded: false,
           ),
@@ -451,11 +414,7 @@ class _CreateGroupStep1State extends ConsumerState<CreateGroupStep1> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
-                  PhosphorIcons.arrowRight(),
-                  size: 16,
-                  color: Colors.black,
-                ),
+                Icon(PhosphorIcons.arrowRight(), size: 16, color: Colors.black),
               ],
             ),
           ),

@@ -5,3 +5,5 @@ export 'journal_provider.dart';
 export 'analytics_provider.dart';
 export 'group_provider.dart';
 export 'habit_creation_provider.dart';
+export 'verse_provider.dart';
+export 'dashboard_provider.dart';

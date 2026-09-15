@@ -69,7 +69,10 @@ class GroupsScreen extends ConsumerWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colors.signal2,
                       foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       shape: RoundedRectangleBorder(
@@ -86,7 +89,10 @@ class GroupsScreen extends ConsumerWidget {
               groupsAsync.when(
                 data: (groups) {
                   final activeCount = groups.length.toString().padLeft(2, '0');
-                  final totalMembers = groups.fold<int>(0, (sum, g) => sum + g.memberCount);
+                  final totalMembers = groups.fold<int>(
+                    0,
+                    (sum, g) => sum + g.memberCount,
+                  );
                   return Row(
                     children: [
                       Text(
@@ -122,7 +128,7 @@ class GroupsScreen extends ConsumerWidget {
                     fontFamily: 'SpaceMono',
                   ),
                 ),
-                error: (_, __) => Text(
+                error: (_, _) => Text(
                   '00 ACTIVE · 0 MEMBERS',
                   style: TextStyle(
                     fontSize: 10,
@@ -154,7 +160,7 @@ class GroupsScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                error: (_, __) => _buildEmptyState(context, colors, textTheme),
+                error: (_, _) => _buildEmptyState(context, colors, textTheme),
               ),
             ],
           ),
@@ -164,10 +170,10 @@ class GroupsScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -184,11 +190,7 @@ class GroupsScreen extends ConsumerWidget {
               color: colors.signal2.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              PhosphorIcons.users(),
-              size: 24,
-              color: colors.signal2,
-            ),
+            child: Icon(PhosphorIcons.users(), size: 24, color: colors.signal2),
           ),
           const SizedBox(height: 16),
           Text(
@@ -213,11 +215,7 @@ class GroupsScreen extends ConsumerWidget {
           Text(
             'Spin up a group from scratch, or punch in an invite code to join one someone shared with you.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              color: colors.ink2,
-              height: 1.5,
-            ),
+            style: TextStyle(fontSize: 13, color: colors.ink2, height: 1.5),
           ),
           const SizedBox(height: 20),
           SizedBox(
@@ -226,11 +224,7 @@ class GroupsScreen extends ConsumerWidget {
               onPressed: () {
                 context.go('/groups/create/step1');
               },
-              icon: Icon(
-                PhosphorIcons.plus(),
-                size: 16,
-                color: Colors.black,
-              ),
+              icon: Icon(PhosphorIcons.plus(), size: 16, color: Colors.black),
               label: const Text(
                 'CREATE GROUP',
                 style: TextStyle(
@@ -290,29 +284,35 @@ class GroupsScreen extends ConsumerWidget {
   }
 
   Widget _buildGroupsList(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      List<Group> groups,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    List<Group> groups,
+  ) {
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: groups.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 16),
+      separatorBuilder: (_, _) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
-        return _buildGroupCard(context, colors, textTheme, groups[index], index + 1);
+        return _buildGroupCard(
+          context,
+          colors,
+          textTheme,
+          groups[index],
+          index + 1,
+        );
       },
     );
   }
 
   Widget _buildGroupCard(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      Group group,
-      int index,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    Group group,
+    int index,
+  ) {
     final memberCountStr = group.memberCount.toString().padLeft(2, '0');
     final indexStr = index.toString().padLeft(2, '0');
 
@@ -344,11 +344,7 @@ class GroupsScreen extends ConsumerWidget {
                       color: group.color.withValues(alpha: 0.3),
                     ),
                   ),
-                  child: Icon(
-                    group.type.icon,
-                    size: 20,
-                    color: group.color,
-                  ),
+                  child: Icon(group.type.icon, size: 20, color: group.color),
                 ),
                 Text(
                   '№ $indexStr',
@@ -411,11 +407,18 @@ class GroupsScreen extends ConsumerWidget {
                     CircleAvatar(
                       radius: 14,
                       backgroundColor: colors.surface2,
-                      child: Icon(PhosphorIcons.user(), size: 14, color: colors.ink),
+                      child: Icon(
+                        PhosphorIcons.user(),
+                        size: 14,
+                        color: colors.ink,
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         color: group.color.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(6),
@@ -477,7 +480,9 @@ class GroupsScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   color: colors.surface,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
                   border: Border.all(color: colors.line),
                 ),
                 child: Column(
@@ -508,10 +513,7 @@ class GroupsScreen extends ConsumerWidget {
                     const SizedBox(height: 4),
                     Text(
                       'Join an existing group or create a new one.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: colors.ink2,
-                      ),
+                      style: TextStyle(fontSize: 13, color: colors.ink2),
                     ),
                     const SizedBox(height: 24),
 

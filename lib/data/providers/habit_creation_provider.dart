@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/habit.dart';
 import '../../domain/repositories/i_habit_repository.dart';
-import '../../domain/entities/habit.dart';
 
 class HabitCreationState {
-  final String id;  // ← Added for editing
+  final String id; // ← Added for editing
   final String name;
   final String? description;
   final HabitCadence cadence;
@@ -18,7 +17,7 @@ class HabitCreationState {
   final bool hasReminder;
   final TimeOfDay? reminderTime;
   final String category;
-  final bool isEditing;  // ← Added to track edit mode
+  final bool isEditing; // ← Added to track edit mode
 
   const HabitCreationState({
     this.id = '',
@@ -44,7 +43,7 @@ class HabitCreationState {
     HabitTimeBlock? block,
     String? icon,
     int? color,
-    int? target,  // ← Keep as int? not Null
+    int? target, // ← Keep as int? not Null
     List<String>? selectedDays,
     bool? hasReminder,
     TimeOfDay? reminderTime,
@@ -59,7 +58,7 @@ class HabitCreationState {
       block: block ?? this.block,
       icon: icon ?? this.icon,
       color: color ?? this.color,
-      target: target ?? this.target,  // ← This handles null correctly
+      target: target ?? this.target, // ← This handles null correctly
       selectedDays: selectedDays ?? this.selectedDays,
       hasReminder: hasReminder ?? this.hasReminder,
       reminderTime: reminderTime ?? this.reminderTime,
@@ -165,7 +164,7 @@ class HabitCreationNotifier extends StateNotifier<HabitCreationState> {
   }
 }
 
-final habitCreationProvider = StateNotifierProvider<HabitCreationNotifier, HabitCreationState>((ref) {
-  return HabitCreationNotifier();
-});
-
+final habitCreationProvider =
+    StateNotifierProvider<HabitCreationNotifier, HabitCreationState>((ref) {
+      return HabitCreationNotifier();
+    });

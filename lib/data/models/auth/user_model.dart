@@ -25,8 +25,22 @@ class UserModel {
     this.lastLoginAt,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: (json['id'] ?? json['_id']) as String? ?? '',
+      email: json['email'] as String? ?? '',
+      name: json['name'] as String?,
+      avatar: json['avatar'] as String?,
+      isEmailVerified:
+          (json['isEmailVerified'] ?? json['isVerified']) as bool? ?? false,
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'].toString())
+          : null,
+      lastLoginAt: json['lastLoginAt'] != null
+          ? DateTime.tryParse(json['lastLoginAt'].toString())
+          : null,
+    );
+  }
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
@@ -69,8 +83,21 @@ class AuthUserModel {
     required this.refreshToken,
   });
 
-  factory AuthUserModel.fromJson(Map<String, dynamic> json) =>
-      _$AuthUserModelFromJson(json);
+  factory AuthUserModel.fromJson(Map<String, dynamic> json) {
+    final userMap = (json['user'] is Map<String, dynamic>)
+        ? json['user'] as Map<String, dynamic>
+        : json;
+    final tokenStr =
+        (json['accessToken'] ?? json['token']) as String? ?? '';
+    final refreshStr =
+        (json['refreshToken'] ?? tokenStr) as String? ?? '';
+
+    return AuthUserModel(
+      user: UserModel.fromJson(userMap),
+      accessToken: tokenStr,
+      refreshToken: refreshStr,
+    );
+  }
 
   Map<String, dynamic> toJson() => _$AuthUserModelToJson(this);
 

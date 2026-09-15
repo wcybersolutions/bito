@@ -3,7 +3,6 @@ import '../../core/storage/secure_storage.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/i_auth_repository.dart';
 import '../datasources/remote/auth_remote_datasource.dart';
-import '../models/auth/user_model.dart';
 
 class AuthRepository implements IAuthRepository {
   final AuthRemoteDataSource _remoteDataSource;

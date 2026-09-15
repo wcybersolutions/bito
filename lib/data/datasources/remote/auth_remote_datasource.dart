@@ -22,7 +22,10 @@ class AuthRemoteDataSource {
       ApiConstants.authVerify,
       data: {'token': token},
     );
-    return AuthUserModel.fromJson(response.data['data']);
+    final data = (response.data is Map<String, dynamic> && response.data.containsKey('data'))
+        ? response.data['data']
+        : response.data;
+    return AuthUserModel.fromJson(data as Map<String, dynamic>);
   }
 
   // POST /api/auth/logout - Logout
@@ -33,19 +36,25 @@ class AuthRemoteDataSource {
   // GET /api/auth/me - Get current user
   Future<AuthUserModel> getCurrentUser() async {
     final response = await _apiClient.get(ApiConstants.authMe);
-    return AuthUserModel.fromJson(response.data['data']);
+    final data = (response.data is Map<String, dynamic> && response.data.containsKey('data'))
+        ? response.data['data']
+        : response.data;
+    return AuthUserModel.fromJson(data as Map<String, dynamic>);
   }
 
   // PUT /api/auth/refresh - Refresh token
   Future<AuthUserModel> refreshToken() async {
     final response = await _apiClient.put(ApiConstants.authRefresh);
-    return AuthUserModel.fromJson(response.data['data']);
+    final data = (response.data is Map<String, dynamic> && response.data.containsKey('data'))
+        ? response.data['data']
+        : response.data;
+    return AuthUserModel.fromJson(data as Map<String, dynamic>);
   }
 
   // GET /api/auth/google - Google OAuth
   Future<String> getGoogleAuthUrl() async {
     final response = await _apiClient.get(ApiConstants.authGoogle);
-    return response.data['url'];
+    return response.data['url'] ?? response.data['data']?['url'] ?? '';
   }
 
   // GET /api/auth/google/callback - Google OAuth callback
@@ -54,6 +63,9 @@ class AuthRemoteDataSource {
       ApiConstants.authGoogleCallback,
       queryParameters: {'code': code},
     );
-    return AuthUserModel.fromJson(response.data['data']);
+    final data = (response.data is Map<String, dynamic> && response.data.containsKey('data'))
+        ? response.data['data']
+        : response.data;
+    return AuthUserModel.fromJson(data as Map<String, dynamic>);
   }
 }

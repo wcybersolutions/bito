@@ -22,7 +22,8 @@ class JournalEntryModel {
     this.longFormContent = '',
   });
 
-  factory JournalEntryModel.fromJson(Map<String, dynamic> json) => _$JournalEntryModelFromJson(json);
+  factory JournalEntryModel.fromJson(Map<String, dynamic> json) =>
+      _$JournalEntryModelFromJson(json);
   Map<String, dynamic> toJson() => _$JournalEntryModelToJson(this);
 
   JournalEntry toDomain() {
@@ -40,21 +41,29 @@ class JournalEntryModel {
     return JournalEntryModel(
       id: entry.id,
       date: entry.date,
-      mood: entry.mood != null ? entry.mood.toString().split('.').last : null,
+      mood: entry.mood?.toString().split('.').last,
       energy: entry.energy,
-      quickLogs: entry.quickLogs.map((q) => QuickLogModel.fromDomain(q)).toList(),
+      quickLogs: entry.quickLogs
+          .map((q) => QuickLogModel.fromDomain(q))
+          .toList(),
       longFormContent: entry.longFormContent,
     );
   }
 
   static JournalMood _stringToMood(String mood) {
     switch (mood) {
-      case 'terrible': return JournalMood.terrible;
-      case 'sad': return JournalMood.sad;
-      case 'neutral': return JournalMood.neutral;
-      case 'happy': return JournalMood.happy;
-      case 'ecstatic': return JournalMood.ecstatic;
-      default: return JournalMood.neutral;
+      case 'terrible':
+        return JournalMood.terrible;
+      case 'sad':
+        return JournalMood.sad;
+      case 'neutral':
+        return JournalMood.neutral;
+      case 'happy':
+        return JournalMood.happy;
+      case 'ecstatic':
+        return JournalMood.ecstatic;
+      default:
+        return JournalMood.neutral;
     }
   }
 }
@@ -71,15 +80,12 @@ class QuickLogModel {
     required this.content,
   });
 
-  factory QuickLogModel.fromJson(Map<String, dynamic> json) => _$QuickLogModelFromJson(json);
+  factory QuickLogModel.fromJson(Map<String, dynamic> json) =>
+      _$QuickLogModelFromJson(json);
   Map<String, dynamic> toJson() => _$QuickLogModelToJson(this);
 
   QuickLog toDomain() {
-    return QuickLog(
-      id: id,
-      timestamp: timestamp,
-      content: content,
-    );
+    return QuickLog(id: id, timestamp: timestamp, content: content);
   }
 
   factory QuickLogModel.fromDomain(QuickLog log) {
@@ -90,4 +96,3 @@ class QuickLogModel {
     );
   }
 }
-

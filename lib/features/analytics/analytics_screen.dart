@@ -52,11 +52,11 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   Widget _buildContent(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      AnalyticsData data,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    AnalyticsData data,
+  ) {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Column(
@@ -66,7 +66,12 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           const SizedBox(height: 20),
           _buildStatsGrid(context, colors, textTheme, data.stats),
           const SizedBox(height: 20),
-          _buildDailyPerformanceChart(context, colors, textTheme, data.dailyPerformance),
+          _buildDailyPerformanceChart(
+            context,
+            colors,
+            textTheme,
+            data.dailyPerformance,
+          ),
           const SizedBox(height: 24),
           _buildCurrentStreaksChart(context, colors, textTheme, data.streaks),
           const SizedBox(height: 24),
@@ -80,11 +85,11 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   Widget _buildHeader(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      AnalyticsData data,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    AnalyticsData data,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -124,9 +129,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           children: [
             Text(
               'Analytics',
-              style: textTheme.displayMedium?.copyWith(
-                color: colors.ink,
-              ),
+              style: textTheme.displayMedium?.copyWith(color: colors.ink),
             ),
             // Dropdown for timeframe selection
             Container(
@@ -184,7 +187,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
         ),
         const SizedBox(height: 4),
         Text(
-          '${data.stats.activeHabits} ACTIVE HABITS · ${_selectedTimeframe} WINDOW',
+          '${data.stats.activeHabits} ACTIVE HABITS · $_selectedTimeframe WINDOW',
           style: TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w500,
@@ -198,11 +201,11 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   Widget _buildStatsGrid(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      AnalyticsStats stats,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    AnalyticsStats stats,
+  ) {
     final statItems = [
       {'value': '${stats.activeHabits}', 'label': 'ACTIVE\nHABITS'},
       {'value': '${stats.completions}', 'label': 'COMPLETIONS'},
@@ -223,14 +226,16 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
           return Expanded(
             child: Stack(
-              alignment: Alignment.center, // <--- Add this to center the column in the cell
+              alignment: Alignment
+                  .center, // <--- Add this to center the column in the cell
               children: [
                 // Stat content
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center, // Ensures text is centered within the column
+                    crossAxisAlignment: CrossAxisAlignment
+                        .center, // Ensures text is centered within the column
                     children: [
                       Text(
                         stat['value']!,
@@ -259,10 +264,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: Container(
-                        width: 1,
-                        color: colors.line,
-                      ),
+                      child: Container(width: 1, color: colors.line),
                     ),
                   ),
               ],
@@ -274,16 +276,18 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   Widget _buildDailyPerformanceChart(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      List<DailyPerformance> dailyData,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    List<DailyPerformance> dailyData,
+  ) {
     if (dailyData.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    final average = dailyData.fold(0.0, (sum, day) => sum + day.percentage) / dailyData.length;
+    final average =
+        dailyData.fold(0.0, (sum, day) => sum + day.percentage) /
+        dailyData.length;
 
     return Container(
       decoration: BoxDecoration(
@@ -331,7 +335,12 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             height: 150,
             child: SfCartesianChart(
               plotAreaBorderWidth: 0,
-              margin: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 16),
+              margin: const EdgeInsets.only(
+                left: 8,
+                right: 8,
+                top: 8,
+                bottom: 16,
+              ),
               primaryXAxis: CategoryAxis(
                 majorGridLines: const MajorGridLines(width: 0),
                 majorTickLines: const MajorTickLines(size: 0),
@@ -369,9 +378,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   borderWidth: 2,
                   opacity: 0.3,
                   enableTooltip: true,
-                  markerSettings: const MarkerSettings(
-                    isVisible: false,
-                  ),
+                  markerSettings: const MarkerSettings(isVisible: false),
                   animationDuration: 300,
                 ),
               ],
@@ -380,33 +387,43 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                 activationMode: ActivationMode.singleTap,
                 header: '',
                 canShowMarker: false,
-                builder: (dynamic data, dynamic point, dynamic series, int pointIndex, int seriesIndex) {
-                  final day = dailyData[pointIndex];
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: colors.surface,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: colors.signal),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.15),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
+                builder:
+                    (
+                      dynamic data,
+                      dynamic point,
+                      dynamic series,
+                      int pointIndex,
+                      int seriesIndex,
+                    ) {
+                      final day = dailyData[pointIndex];
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      '${day.completed}/${day.total} habits completed',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: colors.ink,
-                        fontFamily: 'SpaceMono',
-                      ),
-                    ),
-                  );
-                },
+                        decoration: BoxDecoration(
+                          color: colors.surface,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: colors.signal),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.15),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          '${day.completed}/${day.total} habits completed',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: colors.ink,
+                            fontFamily: 'SpaceMono',
+                          ),
+                        ),
+                      );
+                    },
               ),
             ),
           ),
@@ -417,11 +434,11 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
   // NEW: Current Streaks Bar Chart
   Widget _buildCurrentStreaksChart(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      List<HabitStreak> streaks,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    List<HabitStreak> streaks,
+  ) {
     // Array mimicking the varied colors in the mockup
     final barColors = [
       colors.signal,
@@ -456,7 +473,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           ),
           const SizedBox(height: 16),
           SizedBox(
-            height: (streaks.length * 40.0).clamp(200.0, 400.0), // Dynamic height based on items
+            height: (streaks.length * 40.0).clamp(
+              200.0,
+              400.0,
+            ), // Dynamic height based on items
             child: SfCartesianChart(
               plotAreaBorderWidth: 0,
               margin: EdgeInsets.zero,
@@ -492,11 +512,12 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                 BarSeries<HabitStreak, String>(
                   dataSource: streaks,
                   // Truncates labels manually with ellipsis
-                  xValueMapper: (HabitStreak data, _) =>
-                  data.name.length > 15 ? '${data.name.substring(0, 12)}...' : data.name,
+                  xValueMapper: (HabitStreak data, _) => data.name.length > 15
+                      ? '${data.name.substring(0, 12)}...'
+                      : data.name,
                   yValueMapper: (HabitStreak data, _) => data.currentStreak,
                   pointColorMapper: (HabitStreak data, int index) =>
-                  barColors[index % barColors.length],
+                      barColors[index % barColors.length],
                   borderRadius: BorderRadius.circular(20), // Fully rounded bars
                   width: 0.5, // Thin bars like the image
                   animationDuration: 500,
@@ -508,33 +529,45 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                 activationMode: ActivationMode.singleTap,
                 header: '',
                 canShowMarker: false,
-                builder: (dynamic data, dynamic point, dynamic series, int pointIndex, int seriesIndex) {
-                  final streak = streaks[pointIndex];
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: colors.surface,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: barColors[pointIndex % barColors.length]),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.15),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
+                builder:
+                    (
+                      dynamic data,
+                      dynamic point,
+                      dynamic series,
+                      int pointIndex,
+                      int seriesIndex,
+                    ) {
+                      final streak = streaks[pointIndex];
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      '${streak.name}\\n${streak.currentStreak} day streak',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: colors.ink,
-                        fontFamily: 'SpaceMono',
-                      ),
-                    ),
-                  );
-                },
+                        decoration: BoxDecoration(
+                          color: colors.surface,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: barColors[pointIndex % barColors.length],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.15),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          '${streak.name}\\n${streak.currentStreak} day streak',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: colors.ink,
+                            fontFamily: 'SpaceMono',
+                          ),
+                        ),
+                      );
+                    },
               ),
             ),
           ),
@@ -544,12 +577,11 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   Widget _buildTopHabits(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      List<HabitStreak> streaks,
-      ) {
-
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    List<HabitStreak> streaks,
+  ) {
     final sortedStreaks = List<HabitStreak>.from(streaks);
     sortedStreaks.sort((a, b) {
       double getProgress(HabitStreak streak) {
@@ -559,12 +591,14 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           final parts = streak.value.split('/');
           if (parts.length == 2) {
             final numerator = double.tryParse(parts[0]) ?? 0;
-            final denominator = double.tryParse(parts[1].replaceAll('w', '')) ?? 1;
+            final denominator =
+                double.tryParse(parts[1].replaceAll('w', '')) ?? 1;
             return numerator / denominator;
           }
         }
         return 0.0;
       }
+
       return getProgress(b).compareTo(getProgress(a));
     });
 
@@ -602,7 +636,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               final parts = streak.value.split('/');
               if (parts.length == 2) {
                 final numerator = double.tryParse(parts[0]) ?? 0;
-                final denominator = double.tryParse(parts[1].replaceAll('w', '')) ?? 1;
+                final denominator =
+                    double.tryParse(parts[1].replaceAll('w', '')) ?? 1;
                 progress = numerator / denominator;
               }
             }
@@ -657,7 +692,9 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                               child: Container(
                                 height: 4,
                                 decoration: BoxDecoration(
-                                  color: isComplete ? colors.signal : colors.signal2,
+                                  color: isComplete
+                                      ? colors.signal
+                                      : colors.signal2,
                                   borderRadius: BorderRadius.circular(2),
                                 ),
                               ),
@@ -679,10 +716,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   ),
                 ),
                 if (index < sortedStreaks.length - 1)
-                  Divider(
-                    height: 1,
-                    color: colors.line.withValues(alpha: 0.5),
-                  ),
+                  Divider(height: 1, color: colors.line.withValues(alpha: 0.5)),
               ],
             );
           }),
@@ -692,11 +726,11 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   Widget _buildInsightsCard(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      AnalyticsData data,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    AnalyticsData data,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: colors.surface,
@@ -713,10 +747,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           ),
 
           // Full-width separator - extends to card edges
-          Container(
-            height: 1,
-            color: colors.line,
-          ),
+          Container(height: 1, color: colors.line),
 
           // Ask Your Data
           Padding(
@@ -725,10 +756,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           ),
 
           // Full-width separator
-          Container(
-            height: 1,
-            color: colors.line,
-          ),
+          Container(height: 1, color: colors.line),
 
           // Patterns
           Padding(
@@ -737,10 +765,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           ),
 
           // Full-width separator
-          Container(
-            height: 1,
-            color: colors.line,
-          ),
+          Container(height: 1, color: colors.line),
 
           // Trends
           Padding(
@@ -749,27 +774,31 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           ),
 
           // Full-width separator
-          Container(
-            height: 1,
-            color: colors.line,
-          ),
+          Container(height: 1, color: colors.line),
 
           // Correlations
           Padding(
             padding: const EdgeInsets.all(16),
-            child: _buildCorrelations(context, colors, textTheme, data.correlations),
+            child: _buildCorrelations(
+              context,
+              colors,
+              textTheme,
+              data.correlations,
+            ),
           ),
 
           // Full-width separator
-          Container(
-            height: 1,
-            color: colors.line,
-          ),
+          Container(height: 1, color: colors.line),
 
           // Recommendations
           Padding(
             padding: const EdgeInsets.all(16),
-            child: _buildRecommendations(context, colors, textTheme, data.recommendations),
+            child: _buildRecommendations(
+              context,
+              colors,
+              textTheme,
+              data.recommendations,
+            ),
           ),
         ],
       ),
@@ -777,11 +806,11 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   Widget _buildAISignal(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      AISignal aiSignal,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    AISignal aiSignal,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -790,11 +819,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           children: [
             Row(
               children: [
-                Icon(
-                  PhosphorIcons.robot(),
-                  size: 16,
-                  color: colors.signal2,
-                ),
+                Icon(PhosphorIcons.robot(), size: 16, color: colors.signal2),
                 const SizedBox(width: 8),
                 Text(
                   'AI SIGNAL',
@@ -807,7 +832,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: colors.signal.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
@@ -829,7 +857,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                 ref.refresh(analyticsDataProvider);
               },
               style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 side: BorderSide(color: colors.line),
@@ -865,10 +896,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   Widget _buildAskYourData(
-      BuildContext context,
-      BitoColorScheme colors,
-      AISignal aiSignal,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    AISignal aiSignal,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -905,11 +936,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            PhosphorIcons.chatCircle(),
-            size: 12,
-            color: colors.signal,
-          ),
+          Icon(PhosphorIcons.chatCircle(), size: 12, color: colors.signal),
           const SizedBox(width: 4),
           Text(
             text,
@@ -925,11 +952,11 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   Widget _buildPatterns(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      List<AnalyticsPattern> patterns,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    List<AnalyticsPattern> patterns,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -954,17 +981,17 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               isStable: pattern.isStable,
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
 
   Widget _buildPatternItem(
-      String title,
-      String description,
-      BitoColorScheme colors, {
-        bool isStable = false,
-      }) {
+    String title,
+    String description,
+    BitoColorScheme colors, {
+    bool isStable = false,
+  }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -993,16 +1020,15 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               const SizedBox(height: 4),
               Text(
                 description,
-                style: TextStyle(
-                  fontSize: 12,
-                  height: 1.5,
-                  color: colors.ink2,
-                ),
+                style: TextStyle(fontSize: 12, height: 1.5, color: colors.ink2),
               ),
               if (isStable)
                 Container(
                   margin: const EdgeInsets.only(top: 4),
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: colors.line2,
                     borderRadius: BorderRadius.circular(4),
@@ -1025,11 +1051,11 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   Widget _buildTrends(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      List<AnalyticsTrend> trends,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    List<AnalyticsTrend> trends,
+  ) {
     if (trends.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -1086,7 +1112,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                       if (trend.badge.isNotEmpty)
                         Container(
                           margin: const EdgeInsets.only(top: 4),
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: colors.line2,
                             borderRadius: BorderRadius.circular(4),
@@ -1107,17 +1136,17 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               ],
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
 
   Widget _buildCorrelations(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      List<AnalyticsCorrelation> correlations,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    List<AnalyticsCorrelation> correlations,
+  ) {
     if (correlations.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -1177,17 +1206,17 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               ],
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
 
   Widget _buildRecommendations(
-      BuildContext context,
-      BitoColorScheme colors,
-      TextTheme textTheme,
-      List<AnalyticsRecommendation> recommendations,
-      ) {
+    BuildContext context,
+    BitoColorScheme colors,
+    TextTheme textTheme,
+    List<AnalyticsRecommendation> recommendations,
+  ) {
     if (recommendations.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -1251,7 +1280,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                       ),
                       const SizedBox(height: 4),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: _getPriorityColor(rec.priority, colors),
                           borderRadius: BorderRadius.circular(4),
@@ -1272,7 +1304,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               ],
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

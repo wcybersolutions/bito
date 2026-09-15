@@ -10,7 +10,6 @@ import '../../domain/usecases/habits/get_habit_stats_usecase.dart';
 import '../../domain/usecases/habits/delete_habit_usecase.dart';
 import '../datasources/remote/habit_remote_datasource.dart';
 import '../repositories/habit_repository.dart';
-import '../../domain/entities/habit.dart';
 
 // Data Sources
 final habitRemoteDataSourceProvider = Provider<HabitRemoteDataSource>((ref) {
@@ -65,13 +64,14 @@ final habitsProvider = FutureProvider<List<Habit>>((ref) async {
 final habitStatsProvider = FutureProvider<HabitStats>((ref) async {
   final useCase = ref.watch(getHabitStatsUseCaseProvider);
   final result = await useCase.execute();
-  return result.data ?? HabitStats(
-    totalHabits: 0,
-    completedToday: 0,
-    weeklyCompleted: 0,
-    streak: 0,
-    completionRate: 0,
-  );
+  return result.data ??
+      HabitStats(
+        totalHabits: 0,
+        completedToday: 0,
+        weeklyCompleted: 0,
+        streak: 0,
+        completionRate: 0,
+      );
 });
 
 // Individual habit provider (with family)
@@ -107,8 +107,8 @@ class HabitCompletionNotifier extends StateNotifier<Map<String, bool>> {
   }
 }
 
-final habitCompletionProvider = StateNotifierProvider<HabitCompletionNotifier, Map<String, bool>>((ref) {
-  final repository = ref.watch(habitRepositoryProvider);
-  return HabitCompletionNotifier(repository, ref);
-});
-
+final habitCompletionProvider =
+    StateNotifierProvider<HabitCompletionNotifier, Map<String, bool>>((ref) {
+      final repository = ref.watch(habitRepositoryProvider);
+      return HabitCompletionNotifier(repository, ref);
+    });

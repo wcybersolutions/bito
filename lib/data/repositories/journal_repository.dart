@@ -2,8 +2,6 @@
 import '../../domain/entities/journal_entry.dart';
 import '../../domain/repositories/i_journal_repository.dart';
 import '../datasources/remote/journal_remote_datasource.dart';
-import '../models/journal/journal_entry_model.dart';
-import '../models/journal/journal_stats_model.dart';
 
 class JournalRepository implements IJournalRepository {
   final JournalRemoteDataSource _remoteDataSource;
@@ -41,7 +39,10 @@ class JournalRepository implements IJournalRepository {
   }
 
   @override
-  Future<JournalEntry> updateEntry(String id, Map<String, dynamic> params) async {
+  Future<JournalEntry> updateEntry(
+    String id,
+    Map<String, dynamic> params,
+  ) async {
     try {
       final model = await _remoteDataSource.updateEntry(id, params);
       return model.toDomain();
@@ -79,4 +80,3 @@ class JournalRepository implements IJournalRepository {
     }
   }
 }
-

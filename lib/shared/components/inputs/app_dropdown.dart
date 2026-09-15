@@ -19,7 +19,7 @@ class AppDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
-      value: value,
+      initialValue: value,
       onChanged: onChanged,
       decoration: InputDecoration(
         border: OutlineInputBorder(
@@ -29,13 +29,11 @@ class AppDropdown<T> extends StatelessWidget {
       items: items
           .map(
             (item) => DropdownMenuItem<T>(
-          value: item,
-          child: Text(labelBuilder(item)),
-        ),
-      )
+              value: item,
+              child: Text(labelBuilder(item)),
+            ),
+          )
           .toList(),
     );
   }
 }
-
-

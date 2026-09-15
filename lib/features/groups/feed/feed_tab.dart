@@ -33,10 +33,7 @@ class GroupFeedItem {
 class FeedTab extends StatefulWidget {
   final Group group;
 
-  const FeedTab({
-    super.key,
-    required this.group,
-  });
+  const FeedTab({super.key, required this.group});
 
   @override
   State<FeedTab> createState() => _FeedTabState();
@@ -101,10 +98,14 @@ class _FeedTabState extends State<FeedTab> {
 
   List<GroupFeedItem> get _filteredItems {
     if (_selectedFilter == 'STREAKS') {
-      return _feedItems.where((i) => i.streakInfo != null || i.type == 'streak').toList();
+      return _feedItems
+          .where((i) => i.streakInfo != null || i.type == 'streak')
+          .toList();
     }
     if (_selectedFilter == 'KUDOS') {
-      return _feedItems.where((i) => i.likesCount > 0 || i.reactions.isNotEmpty).toList();
+      return _feedItems
+          .where((i) => i.likesCount > 0 || i.reactions.isNotEmpty)
+          .toList();
     }
     return _feedItems;
   }
@@ -196,11 +197,7 @@ class _FeedTabState extends State<FeedTab> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      PhosphorIcons.users(),
-                      size: 13,
-                      color: colors.ink,
-                    ),
+                    Icon(PhosphorIcons.users(), size: 13, color: colors.ink),
                     const SizedBox(width: 5),
                     Text(
                       'GROUP INFO',
@@ -224,10 +221,8 @@ class _FeedTabState extends State<FeedTab> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: _filteredItems.length,
-            separatorBuilder: (_, __) => Divider(
-              height: 24,
-              color: colors.line.withValues(alpha: 0.5),
-            ),
+            separatorBuilder: (_, _) =>
+                Divider(height: 24, color: colors.line.withValues(alpha: 0.5)),
             itemBuilder: (context, index) {
               final item = _filteredItems[index];
               return _buildFeedItem(context, colors, item);
@@ -255,10 +250,7 @@ class _FeedTabState extends State<FeedTab> {
             child: Align(
               alignment: Alignment.centerRight,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: colors.surface2,
                   borderRadius: BorderRadius.circular(20),
@@ -439,7 +431,9 @@ class _FeedTabState extends State<FeedTab> {
                   child: Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: showPicker ? colors.signal.withValues(alpha: 0.2) : colors.surface,
+                      color: showPicker
+                          ? colors.signal.withValues(alpha: 0.2)
+                          : colors.surface,
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                         color: showPicker ? colors.signal : colors.line,
@@ -460,7 +454,11 @@ class _FeedTabState extends State<FeedTab> {
     );
   }
 
-  Widget _buildReactionOption(GroupFeedItem item, String emoji, BitoColorScheme colors) {
+  Widget _buildReactionOption(
+    GroupFeedItem item,
+    String emoji,
+    BitoColorScheme colors,
+  ) {
     final isSelected = item.reactions.contains(emoji);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -469,13 +467,12 @@ class _FeedTabState extends State<FeedTab> {
         margin: const EdgeInsets.symmetric(horizontal: 2),
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
         decoration: BoxDecoration(
-          color: isSelected ? colors.signal.withValues(alpha: 0.2) : Colors.transparent,
+          color: isSelected
+              ? colors.signal.withValues(alpha: 0.2)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(
-          emoji,
-          style: const TextStyle(fontSize: 16),
-        ),
+        child: Text(emoji, style: const TextStyle(fontSize: 16)),
       ),
     );
   }
