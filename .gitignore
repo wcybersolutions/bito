@@ -43,3 +43,16 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Build artifacts
+android/build/
+build/
+
+# IDE / DevTools
+devtools_options.yaml
+
+# Generator metadata
+openapitools.json
+
+# Generated API client
+lib/api_client/
